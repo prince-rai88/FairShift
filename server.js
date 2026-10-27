@@ -346,11 +346,15 @@ app.use((req, res) => {
   res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-// CRITICAL FOR GOOGLE CLOUD RUN: listen on 0.0.0.0 and process.env.PORT
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`====================================================`);
-  console.log(`🚀 FairShift: Decent Work Platform running!`);
-  console.log(`🌐 Listening on http://0.0.0.0:${PORT}`);
-  console.log(`🛡️ UN SDG 8: Decent Work and Economic Growth`);
-  console.log(`====================================================`);
-});
+// CRITICAL FOR GOOGLE CLOUD RUN / LOCAL: listen on 0.0.0.0 and process.env.PORT
+if (!process.env.VERCEL) {
+  app.listen(PORT, '0.0.0.0', () => {
+    console.log(`====================================================`);
+    console.log(`🚀 FairShift: Decent Work Platform running!`);
+    console.log(`🌐 Listening on http://0.0.0.0:${PORT}`);
+    console.log(`🛡️ UN SDG 8: Decent Work and Economic Growth`);
+    console.log(`====================================================`);
+  });
+}
+
+export default app;
