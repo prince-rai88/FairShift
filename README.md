@@ -126,11 +126,14 @@ gcloud run deploy fairshift \
   --port 8080
 ```
 
-### Option 2: Vercel / Netlify (Instant 1-Click Deploy)
-FairShift includes `vercel.json` pre-configured for static single-page builds:
-```bash
-npx vercel --prod
-```
+### Option 2: Vercel (Instant 1-Click Serverless Deploy)
+FairShift includes `vercel.json` and `api/index.js` pre-configured for instant deployment (Express API as serverless functions + React static frontend):
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprince-rai88%2FFairShift)
+
+1. Go to [https://vercel.com/new](https://vercel.com/new)
+2. Import **`prince-rai88/FairShift`**
+3. Click **Deploy** — Vercel automatically detects Vite, builds `dist/`, and serves `/api/*` endpoints via Serverless Functions!
 
 ### Option 3: Local Development
 ```bash
