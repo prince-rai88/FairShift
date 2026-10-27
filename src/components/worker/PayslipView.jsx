@@ -68,7 +68,7 @@ export default function PayslipView({ worker, sector, t }) {
       {/* Main Transparent Calculation Breakdown */}
       <div className="glass-panel" style={{ padding: '24px' }}>
         <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '16px' }}>
-          Itemized Earnings & Social Security Breakdown
+          Earnings Breakdown — Full Transparency
         </h3>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -190,7 +190,7 @@ export default function PayslipView({ worker, sector, t }) {
             </div>
             <div style={{
               fontFamily: 'var(--font-display)',
-              fontSize: '2rem',
+              fontSize: '2.4rem',
               fontWeight: 800,
               color: '#F8FAFC'
             }}>

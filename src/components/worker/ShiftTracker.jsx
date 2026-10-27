@@ -89,7 +89,7 @@ export default function ShiftTracker({
       
       {/* Active Shift Card */}
       <div className="glass-panel" style={{
-        padding: '24px',
+        padding: '32px 28px',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden'
@@ -100,38 +100,40 @@ export default function ShiftTracker({
           top: '-50px',
           left: '50%',
           transform: 'translateX(-50%)',
-          width: '200px',
-          height: '200px',
+          width: '280px',
+          height: '280px',
           borderRadius: '50%',
           background: activeShift 
-            ? (isOvertime ? 'radial-gradient(circle, rgba(239, 68, 68, 0.25) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(0, 212, 170, 0.25) 0%, transparent 70%)')
-            : 'radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%)',
+            ? (isOvertime ? 'radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(0, 212, 170, 0.18) 0%, transparent 65%)')
+            : 'radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 65%)',
           pointerEvents: 'none'
         }} />
 
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
+        {/* Status Badge + Location */}
+        <div style={{ marginBottom: '20px' }}>
           <span className={`pill-badge ${activeShift ? (isOvertime ? 'pill-rose' : 'pill-teal') : 'pill-purple'}`}>
             {activeShift ? (isOvertime ? '● OVERTIME ACTIVE (1.5x Rate)' : '● ON-SITE SHIFT ACTIVE') : '○ NO ACTIVE SHIFT'}
           </span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px' }}>
             {activeShift ? activeShift.location : sector.location}
-          </span>
+          </div>
         </div>
 
         {/* Live Timer Display */}
         <div style={{
           fontFamily: 'var(--font-display)',
-          fontSize: '3.6rem',
+          fontSize: '4.2rem',
           fontWeight: 800,
-          letterSpacing: '-0.03em',
+          letterSpacing: '-0.04em',
           color: isOvertime ? '#F87171' : '#F8FAFC',
-          textShadow: activeShift ? '0 0 20px rgba(0, 212, 170, 0.3)' : 'none',
-          marginBottom: '8px'
+          textShadow: activeShift ? '0 0 30px rgba(0, 212, 170, 0.35)' : 'none',
+          marginBottom: '6px',
+          lineHeight: 1
         }}>
           {formatTime(elapsedSeconds)}
         </div>
 
-        <div style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+        <div style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '28px' }}>
           {activeShift 
             ? `${t.currentShiftTime} • Clocked in at ${activeShift.startTime}` 
             : t.noActiveShift}
@@ -157,86 +159,82 @@ export default function ShiftTracker({
           </div>
         )}
 
-        {/* Live Running Earnings Calculator */}
+        {/* Live Earnings — prominent center piece when shift is active */}
         {activeShift && (
           <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-            gap: '12px',
-            background: 'rgba(0, 0, 0, 0.25)',
-            padding: '16px',
+            background: 'rgba(0, 0, 0, 0.3)',
             borderRadius: 'var(--radius-md)',
-            marginBottom: '24px',
+            padding: '20px 16px',
+            marginBottom: '28px',
             border: '1px solid var(--border-subtle)'
           }}>
-            <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.standardHours}</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#00D4AA' }}>
-                {payCalculation.standardHours}h
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.overtimeHours}</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: payCalculation.overtimeHours > 0 ? '#F87171' : 'var(--text-secondary)' }}>
-                {payCalculation.overtimeHours}h
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Estimated Net Earned</div>
-              <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#38BDF8' }}>
+            {/* Net earned — hero number */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Estimated Net Earned This Shift</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.6rem', fontWeight: 800, color: '#38BDF8', lineHeight: 1 }}>
                 ₹{payCalculation.netTakeHome}
+              </div>
+            </div>
+            {/* Secondary stats row */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ background: 'rgba(0, 212, 170, 0.07)', borderRadius: 'var(--radius-sm)', padding: '12px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{t.standardHours}</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#00D4AA' }}>{payCalculation.standardHours}h</div>
+              </div>
+              <div style={{ background: payCalculation.overtimeHours > 0 ? 'rgba(239,68,68,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-sm)', padding: '12px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{t.overtimeHours}</div>
+                <div style={{ fontSize: '1.35rem', fontWeight: 700, color: payCalculation.overtimeHours > 0 ? '#F87171' : 'var(--text-secondary)' }}>{payCalculation.overtimeHours}h</div>
               </div>
             </div>
           </div>
         )}
 
-        {/* Action Punch Buttons */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '14px', flexWrap: 'wrap' }}>
-          {!activeShift ? (
-            <>
-              <button
-                onClick={handleScanQr}
-                className="btn-primary pulse-target"
-                style={{ padding: '16px 32px', fontSize: '1.05rem' }}
-              >
-                <span>📷</span> {t.simulatedQr}
-              </button>
-              <button
-                onClick={() => {
-                  setActiveShift({
-                    startTime: new Date().toLocaleTimeString(),
-                    location: `${sector.name} — Geofence Verified`,
-                    elapsedSeconds: 0
-                  });
-                  setElapsedSeconds(0);
-                }}
-                className="btn-secondary"
-                style={{ padding: '16px 24px', fontSize: '0.95rem' }}
-              >
-                <span>⚡</span> Quick Punch IN
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={handlePunchOut}
-                className="btn-danger"
-                style={{ padding: '16px 32px', fontSize: '1.05rem' }}
-              >
-                <span>🛑</span> {t.checkOutBtn}
-              </button>
-              {/* Fast Forward button to test 8h overtime easily for judges */}
-              <button
-                onClick={() => setElapsedSeconds(prev => prev + 3600 * 2)}
-                className="btn-secondary"
-                title="Simulation helper: advance 2 hours to showcase overtime calculation"
-                style={{ fontSize: '0.82rem', padding: '10px 14px' }}
-              >
-                ⏩ +2 Hours (Demo Overtime)
-              </button>
-            </>
-          )}
-        </div>
+        {/* Hero Punch Action Button — full width, unmissable */}
+        {!activeShift ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              id="punch-in-btn"
+              onClick={handleScanQr}
+              className="btn-primary pulse-target"
+              style={{ width: '100%', padding: '18px', fontSize: '1.1rem', borderRadius: 'var(--radius-md)' }}
+            >
+              <span>📷</span> {t.simulatedQr}
+            </button>
+            <button
+              onClick={() => {
+                setActiveShift({
+                  startTime: new Date().toLocaleTimeString(),
+                  location: `${sector.name} — Geofence Verified`,
+                  elapsedSeconds: 0
+                });
+                setElapsedSeconds(0);
+              }}
+              className="btn-secondary"
+              style={{ width: '100%', padding: '14px', fontSize: '0.95rem' }}
+            >
+              <span>⚡</span> Quick Punch IN (No QR)
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <button
+              id="punch-out-btn"
+              onClick={handlePunchOut}
+              className="btn-danger"
+              style={{ width: '100%', padding: '18px', fontSize: '1.1rem', borderRadius: 'var(--radius-md)' }}
+            >
+              <span>🛑</span> {t.checkOutBtn}
+            </button>
+            <button
+              onClick={() => setElapsedSeconds(prev => prev + 3600 * 2)}
+              className="btn-secondary"
+              title="Demo helper: advance 2 hours to showcase overtime"
+              style={{ width: '100%', fontSize: '0.85rem', padding: '11px' }}
+            >
+              ⏩ +2 Hours (Demo Overtime)
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Simulated QR Code Scanning Modal */}

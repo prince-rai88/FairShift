@@ -30,7 +30,7 @@ export default function WorkerPortal({
 
   return (
     <div style={{
-      maxWidth: isMobileFrame ? '440px' : '900px',
+      maxWidth: isMobileFrame ? '440px' : '960px',
       margin: '0 auto',
       transition: 'all 0.3s ease'
     }}>
@@ -110,15 +110,15 @@ export default function WorkerPortal({
           </div>
         </div>
 
-        {/* Navigation Tabs (Big touch targets for low-end phone & low-literacy) */}
+        {/* Navigation Tabs — large, clear touch targets */}
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(5, 1fr)',
           gap: '6px',
           background: 'rgba(255, 255, 255, 0.04)',
-          padding: '6px',
+          padding: '8px',
           borderRadius: 'var(--radius-md)',
-          marginBottom: '20px',
+          marginBottom: '24px',
           border: '1px solid var(--border-subtle)'
         }}>
           {[
@@ -136,17 +136,17 @@ export default function WorkerPortal({
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
-                padding: '8px 4px',
+                padding: '12px 4px',
                 borderRadius: 'var(--radius-sm)',
-                background: activeTab === tab.id ? 'rgba(0, 212, 170, 0.2)' : 'transparent',
+                background: activeTab === tab.id ? 'rgba(0, 212, 170, 0.18)' : 'transparent',
                 color: activeTab === tab.id ? '#00D4AA' : 'var(--text-secondary)',
                 border: activeTab === tab.id ? '1px solid rgba(0, 212, 170, 0.35)' : '1px solid transparent',
                 transition: 'all 0.2s',
-                gap: '2px'
+                gap: '4px'
               }}
             >
-              <span style={{ fontSize: '1.25rem' }}>{tab.icon}</span>
-              <span style={{ fontSize: '0.68rem', fontWeight: 700 }}>{tab.label}</span>
+              <span style={{ fontSize: '1.4rem' }}>{tab.icon}</span>
+              <span style={{ fontSize: '0.72rem', fontWeight: 700 }}>{tab.label}</span>
             </button>
           ))}
         </div>
