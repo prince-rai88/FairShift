@@ -31,3 +31,14 @@ secrets.*
 *.njsproj
 *.sln
 *.sw?
+
+# Python & Django
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+db.sqlite3
+media/
+staticfiles/

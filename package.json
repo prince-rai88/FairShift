@@ -9,7 +9,11 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "start": "node server.js"
+    "start": "node server.js",
+    "backend:start": "venv/bin/python backend/manage.py runserver 0.0.0.0:8000",
+    "backend:migrate": "venv/bin/python backend/manage.py migrate",
+    "backend:seed": "venv/bin/python backend/manage.py seed_data",
+    "backend:test": "venv/bin/python -c \"import os, subprocess; subprocess.run(['python', 'manage.py', 'test', 'api'], cwd='backend', executable=os.path.abspath('venv/bin/python'))\""
   },
   "dependencies": {
     "cors": "^2.8.6",
