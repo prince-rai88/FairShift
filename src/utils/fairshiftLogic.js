@@ -1,8 +1,38 @@
 /**
- * FairShift Decent-Work Core Business Logic
- * Compliant with UN SDG 8 (Fair wages, safe working environments, anti-exploitation)
+ * @file fairshiftLogic.js
+ * @description Core Algorithmic Engine for FairShift Platform
+ * Aligned with UN Sustainable Development Goal 8 (Decent Work & Economic Growth)
+ * Targets:
+ *  - SDG 8.5: Full and productive employment, equal pay for work of equal value
+ *  - SDG 8.8: Protect labour rights, promote safe and secure working environments
  */
 
+/**
+ * @typedef {Object} ShiftPayBreakdown
+ * @property {number} hours - Total hours worked in shift
+ * @property {number} standardHours - Standard hours capped at 8h
+ * @property {number} overtimeHours - Statutory overtime hours beyond 8h
+ * @property {number} hourlyRate - Base hourly wage in INR
+ * @property {number} hazardRate - Statutory hazardous environment hourly premium in INR
+ * @property {number} basePay - Base earnings for standard hours
+ * @property {number} overtimePay - Overtime earnings calculated at statutory 1.5x multiplier
+ * @property {number} hazardPay - Hazard allowance for total shift duration
+ * @property {number} grossEarnings - Sum of basePay, overtimePay, and hazardPay
+ * @property {number} pfDeduction - Employee Provident Fund deduction (12%)
+ * @property {number} esiDeduction - Employee State Insurance deduction (0.75%)
+ * @property {number} totalDeductions - Sum of statutory deductions
+ * @property {number} netTakeHome - Final net wage after transparent deductions
+ */
+
+/**
+ * Calculates itemized shift pay according to statutory fair labor standards.
+ * Guaranteed 1.5x overtime multiplier for hours exceeding 8 hours.
+ *
+ * @param {number|string} hoursWorked - Total hours worked in the shift
+ * @param {number|string} [hourlyRate=120] - Base wage rate per hour
+ * @param {number|string} [hazardRate=25] - Additional hazard rate per hour
+ * @returns {ShiftPayBreakdown} Comprehensive wage and deduction itemization
+ */
 export function calculateShiftPay(hoursWorked, hourlyRate = 120, hazardRate = 25) {
   const hours = Math.max(0, parseFloat(hoursWorked) || 0);
   const rate = Math.max(0, parseFloat(hourlyRate) || 120);
@@ -12,7 +42,7 @@ export function calculateShiftPay(hoursWorked, hourlyRate = 120, hazardRate = 25
   const overtimeHours = Math.max(0, hours - 8);
 
   const basePay = Math.round(standardHours * rate);
-  // 1.5x Overtime premium per statutory fair-labor standards
+  // Statutory 1.5x Overtime premium per international labor standards
   const overtimePay = Math.round(overtimeHours * rate * 1.5);
   const hazardPay = Math.round(hours * hazard);
 
@@ -42,6 +72,33 @@ export function calculateShiftPay(hoursWorked, hourlyRate = 120, hazardRate = 25
   };
 }
 
+/**
+ * @typedef {'SAFE' | 'MODERATE' | 'CRITICAL'} FatigueRiskLevel
+ */
+
+/**
+ * @typedef {Object} FatigueEvaluation
+ * @property {number} weeklyHours - Total hours worked in current work week
+ * @property {number} gapHours - Rest turnaround between last shift and current shift
+ * @property {number} streak - Consecutive days worked without rest
+ * @property {FatigueRiskLevel} riskLevel - Risk categorization level
+ * @property {number} riskScore - 0-100 risk score
+ * @property {string[]} violations - Specific labor law breaches detected
+ * @property {boolean} needsRestBreak - Flag indicating immediate relief required
+ */
+
+/**
+ * Evaluates frontline worker fatigue and checks for statutory labor violations.
+ * Flags:
+ *  - Exceeding 48-hour statutory weekly limit (Labor Act violation)
+ *  - Turnaround rest gap under 8 hours (OSHA safety violation)
+ *  - 7 or more consecutive working shifts without a rest day
+ *
+ * @param {number|string} weeklyHours - Hours accumulated in the work week
+ * @param {number|string} [lastShiftGapHours=12] - Hours between prior shift end and next shift
+ * @param {number|string} [consecutiveShifts=4] - Number of consecutive shift days
+ * @returns {FatigueEvaluation} Fatigue metrics and violation alerts
+ */
 export function evaluateFatigueRisk(weeklyHours, lastShiftGapHours = 12, consecutiveShifts = 4) {
   const hours = parseFloat(weeklyHours) || 0;
   const gap = parseFloat(lastShiftGapHours) || 12;
@@ -81,6 +138,27 @@ export function evaluateFatigueRisk(weeklyHours, lastShiftGapHours = 12, consecu
   };
 }
 
+/**
+ * @typedef {Object} AttritionEvaluation
+ * @property {number} riskScore - 0-100 predicted turnover probability
+ * @property {string} category - Risk categorization ('Low Risk', 'Moderate Warning', 'High Attrition Risk')
+ * @property {string} badgeColor - UI status hex color code
+ * @property {{ fatigueWeight: number, dissatisfactionWeight: number, hazardWeight: number }} factors - Component weightings
+ */
+
+/**
+ * Multi-factor AI Attrition & Burnout Predictor.
+ * Calculates probability of frontline worker departure using composite factors:
+ * fatigue index (40%), worker dissatisfaction (40%), and unresolved safety hazards (20%).
+ *
+ * @param {Object} worker - Worker metrics object
+ * @param {number} [worker.fatigueScore] - Fatigue score (0-100)
+ * @param {number} [worker.satisfactionScore] - Satisfaction score (0-100)
+ * @param {number} [worker.reportedHazardsCount] - Unresolved hazards near worker
+ * @param {number} [worker.overtimeHours] - Cumulative overtime hours
+ * @param {number} [worker.totalHours] - Total hours worked
+ * @returns {AttritionEvaluation} Turnout probability and factor breakdown
+ */
 export function calculateAttritionRisk(worker) {
   const fatigueScore = worker.fatigueScore || 40;
   const satisfactionScore = worker.satisfactionScore || 70; // 0-100

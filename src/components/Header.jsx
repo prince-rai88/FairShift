@@ -42,7 +42,7 @@ export default function Header({
           <span style={{ fontSize: '1.15rem', fontWeight: 700, letterSpacing: '-0.03em' }}>
             Fair<span style={{ color: '#16A34A' }}>Shift</span>
           </span>
-          <span className="badge badge-black" style={{ fontSize: '0.62rem' }}>SDG 8</span>
+          <span className="badge badge-black" style={{ fontSize: '0.62rem' }}>UN SDG 8.5 & 8.8</span>
         </div>
 
         {/* Center controls */}

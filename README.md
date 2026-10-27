@@ -80,24 +80,37 @@ FairShift adapts dynamically to different operational environments:
 
 ---
 
-## 🧪 Automated Testing & Evaluation Parameters
+## 🎯 Direct Challenge Statement Alignment: UN SDG 8 Targets 8.5 & 8.8
 
-FairShift comes with a **native test suite** validating labor calculations, fatigue violation triggers, and attrition algorithms:
+| Hackathon Requirement | FairShift Solution | SDG Target & Legal Standard |
+|---|---|---|
+| **Dual Interface** | Frontline Worker Portal & Employer Command Center | **SDG 8.5** (Decent work for all women & men) |
+| **Wage Transparency** | Itemized Base, 1.5x Overtime, PF (12%), ESI (0.75%) | **SDG 8.5** (Equal pay for work of equal value) |
+| **Workplace Safety** | Real-time voice & text safety hazard alert desk | **SDG 8.8** (Safe & secure working environments) |
+| **Anti-Fatigue Monitoring** | Automated flags for >48h weekly or <8h turnaround | **SDG 8.8** (Protection of labor rights) |
+| **Anti-Retaliation Protection**| SHA-256 cryptographic anonymous whistleblower reviews | **SDG 8.8** (Safe reporting channels) |
+| **Credential Mobility** | Verifiable Universal Skill Passport with QR sharing | **SDG 8.5** (Productive employment & career mobility)|
+| **Multi-Industry Scope** | MegaInfra Construction Site Alpha & St. Jude Hospital | Cross-sector frontline applicability |
+
+---
+
+## 🧪 Automated Testing & Evaluation Suite (21 Tests Passing)
+
+FairShift comes with a **Vitest test suite** validating statutory wage calculations, fatigue violation triggers, attrition algorithms, and server integrity:
 
 ```bash
 npm test
 ```
 
-### Test Results:
+### Test Results (21/21 Passing):
 ```text
-✔ Shift Wage Calculator: Standard 8h shift (0.33ms)
-✔ Shift Wage Calculator: 1.5x Overtime premium (0.05ms)
-✔ Shift Wage Calculator: Statutory PF and ESI deductions (0.04ms)
-✔ Fatigue Engine: Identifies dangerous turnaround under 8 hours (0.06ms)
-✔ Fatigue Engine: Identifies 48-hour legal threshold exceedance (0.29ms)
-✔ Attrition Predictor: High risk for overworked dissatisfied worker (0.06ms)
+✓ src/utils/fairshiftLogic.test.js (8 tests)
+✓ test/fairshift.test.js (13 tests)
 
-ℹ tests 6 | suites 0 | pass 6 | fail 0 | cancelled 0 | duration_ms 33ms
+Test Files  2 passed (2)
+Tests       21 passed (21)
+Duration    128ms
+```
 ```
 
 ### Evaluation Parameters Addressed:
