@@ -9,326 +9,160 @@ export default function SkillPassport({ worker, sector, t, onAddSkill }) {
   const handleAddSubmit = (e) => {
     e.preventDefault();
     if (!newTitle) return;
-    if (onAddSkill) {
-      onAddSkill({
-        title: newTitle,
-        issuer: newIssuer || "National Skill Registry"
-      });
-    }
-    setNewTitle('');
-    setNewIssuer('');
-    setIsAddSkillOpen(false);
+    if (onAddSkill) onAddSkill({ title: newTitle, issuer: newIssuer || 'National Skill Registry' });
+    setNewTitle(''); setNewIssuer(''); setIsAddSkillOpen(false);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      
-      {/* Universal DecentWork Credential Card */}
-      <div style={{
-        background: 'linear-gradient(135deg, #131C31 0%, #1E1B4B 100%)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '28px',
-        border: '1px solid rgba(99, 102, 241, 0.4)',
-        boxShadow: '0 15px 35px -5px rgba(0, 0, 0, 0.7)',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Holographic accent glow */}
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
+
+      {/* LEFT — Credential Card + Skills */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+        {/* Identity Card */}
         <div style={{
-          position: 'absolute',
-          top: '-60px',
-          right: '-60px',
-          width: '180px',
-          height: '180px',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0, 212, 170, 0.3) 0%, transparent 70%)',
-          pointerEvents: 'none'
-        }} />
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '14px', marginBottom: '24px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="pill-badge pill-purple">PORTABLE SKILL PASSPORT</span>
-              <span className="pill-badge pill-teal">SDG 8.6 Youth & Adult Skills</span>
-            </div>
-            <h2 style={{ fontSize: '1.7rem', fontWeight: 800, marginTop: '8px' }}>
-              {worker.name}
-            </h2>
-            <div style={{ fontSize: '0.9rem', color: '#A5B4FC' }}>
-              {worker.role} • {sector.name}
-            </div>
-          </div>
-
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{t.workerId}</div>
-            <div style={{
-              fontFamily: 'monospace',
-              fontSize: '1.1rem',
-              fontWeight: 700,
-              color: '#00D4AA',
-              background: 'rgba(0, 0, 0, 0.3)',
-              padding: '4px 10px',
-              borderRadius: '6px'
-            }}>
-              {worker.id}
-            </div>
-          </div>
-        </div>
-
-        {/* Experience & Verified Stats */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-          gap: '12px',
-          padding: '16px',
-          background: 'rgba(0, 0, 0, 0.25)',
-          borderRadius: 'var(--radius-md)',
-          marginBottom: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.08)'
+          background: '#0A0A0A', borderRadius: 'var(--radius-xl)',
+          padding: '28px', position: 'relative', overflow: 'hidden',
+          border: '1.5px solid #1a1a1a',
         }}>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Audited Experience</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#F8FAFC' }}>
-              {worker.totalHours} Verified Hours
+          {/* Subtle texture */}
+          <div style={{
+            position: 'absolute', top: '-80px', right: '-80px', width: '200px', height: '200px',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(22,163,74,0.25) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '24px' }}>
+            <div>
+              <span className="badge" style={{ background: '#1a1a1a', color: '#9ca3af', border: '1px solid #333', fontSize: '0.62rem', marginBottom: '10px', display: 'inline-flex' }}>
+                PORTABLE SKILL PASSPORT
+              </span>
+              <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff', letterSpacing: '-0.03em', marginTop: '6px' }}>
+                {worker.name}
+              </div>
+              <div style={{ fontSize: '0.85rem', color: '#6b7280', marginTop: '4px' }}>
+                {worker.role} · {sector.name}
+              </div>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <div style={{ fontSize: '0.68rem', color: '#4b5563', marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{t.workerId}</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 700, color: '#16a34a' }}>
+                {worker.id}
+              </div>
             </div>
           </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Accredited Skills</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#00D4AA' }}>
-              {worker.skills.length} Badges
-            </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
+            {[
+              { label: 'Verified Hours', value: worker.totalHours },
+              { label: 'Skill Badges', value: worker.skills.length },
+              { label: 'Safety Level', value: 'Level A' },
+            ].map((stat, i) => (
+              <div key={i} style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '10px', padding: '12px' }}>
+                <div style={{ fontSize: '0.68rem', color: '#6b7280', marginBottom: '4px' }}>{stat.label}</div>
+                <div style={{ fontWeight: 700, color: '#fff', fontSize: '1rem' }}>{stat.value}</div>
+              </div>
+            ))}
           </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Safety Standing</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 700, color: '#38BDF8' }}>
-              Level A (Zero Violations)
-            </div>
+
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button onClick={() => setIsShareModalOpen(true)} className="btn-green" style={{ flex: 1, fontSize: '0.88rem' }}>
+              📲 {t.exportPassport}
+            </button>
+            <button onClick={() => setIsAddSkillOpen(true)} style={{
+              flex: 1, padding: '12px', borderRadius: 'var(--radius-md)', fontWeight: 700,
+              fontSize: '0.88rem', background: 'rgba(255,255,255,0.08)',
+              border: '1.5px solid rgba(255,255,255,0.15)', color: '#fff',
+              fontFamily: 'var(--font-sans)', cursor: 'pointer',
+            }}>
+              ➕ {t.addSkill}
+            </button>
           </div>
         </div>
 
-        {/* Action buttons */}
-        <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-          <button
-            onClick={() => setIsShareModalOpen(true)}
-            className="btn-primary"
-            style={{ fontSize: '0.88rem' }}
-          >
-            <span>📲</span> {t.exportPassport}
-          </button>
-          <button
-            onClick={() => setIsAddSkillOpen(true)}
-            className="btn-secondary"
-            style={{ fontSize: '0.88rem' }}
-          >
-            <span>➕</span> {t.addSkill}
-          </button>
-        </div>
       </div>
 
-      {/* Verified Badges List */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '16px' }}>
-          {t.verifiedBadges}
-        </h3>
+      {/* RIGHT — Verified Badges */}
+      <div className="card" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+          <span className="section-num">2</span>
+          <span className="section-label">{t.verifiedBadges}</span>
+        </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {worker.skills.map((skill) => (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          {worker.skills.map(skill => (
             <div key={skill.id} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '16px',
-              background: 'rgba(255, 255, 255, 0.02)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-subtle)',
-              flexWrap: 'wrap',
-              gap: '10px'
+              display: 'flex', alignItems: 'center', gap: '14px',
+              padding: '14px 16px', background: 'var(--bg-page)',
+              borderRadius: 'var(--radius-md)', border: '1.5px solid var(--border)',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <div style={{
-                  width: '40px',
-                  height: '40px',
-                  borderRadius: '10px',
-                  background: 'rgba(0, 212, 170, 0.15)',
-                  color: '#00D4AA',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '20px'
-                }}>
-                  🏅
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>
-                    {skill.title}
-                  </div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                    Accredited by: {skill.issuer} • Certified {skill.date}
-                  </div>
+              <div style={{
+                width: '40px', height: '40px', borderRadius: '10px', flexShrink: 0,
+                background: '#F0FDF4', border: '1.5px solid #BBF7D0',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px',
+              }}>🏅</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 700, fontSize: '0.9rem', marginBottom: '2px' }}>{skill.title}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                  {skill.issuer} · {skill.date}
                 </div>
               </div>
-
-              <span className="pill-badge pill-teal" style={{ fontSize: '0.75rem' }}>
-                ✓ Immutable Verified
-              </span>
+              <span className="badge badge-green" style={{ flexShrink: 0, fontSize: '0.65rem' }}>✓ Verified</span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Share Passport QR Modal */}
+      {/* Share Modal */}
       {isShareModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.85)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '20px'
-        }}>
-          <div className="glass-panel" style={{
-            maxWidth: '380px',
-            width: '100%',
-            padding: '28px',
-            textAlign: 'center',
-            border: '1px solid rgba(99, 102, 241, 0.4)'
-          }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '6px' }}>
-              Digital Skill Verification QR
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-              Any prospective employer or contractor can scan to verify your authentic certifications instantly without re-training from zero.
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
+          <div className="card" style={{ maxWidth: '360px', width: '100%', padding: '32px', textAlign: 'center' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '6px' }}>Digital Skill Verification QR</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+              Any employer can scan to instantly verify your certifications without re-training.
             </p>
-
-            {/* Generated QR Placeholder */}
             <div style={{
-              width: '200px',
-              height: '200px',
-              margin: '0 auto 16px',
-              background: '#FFFFFF',
-              borderRadius: '12px',
-              padding: '12px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center'
+              width: '180px', height: '180px', margin: '0 auto 16px',
+              background: '#fff', borderRadius: 'var(--radius-md)', padding: '12px',
+              border: '1.5px solid var(--border)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             }}>
-              <div style={{ fontSize: '72px' }}>🔲</div>
-              <div style={{ color: '#0F172A', fontSize: '0.72rem', fontWeight: 800 }}>
-                FAIRSHIFT://SKILLS/{worker.id}
+              <div style={{ fontSize: '64px' }}>🔲</div>
+              <div style={{ color: '#0A0A0A', fontSize: '0.65rem', fontWeight: 800, fontFamily: 'var(--font-mono)' }}>
+                FAIRSHIFT/{worker.id}
               </div>
             </div>
-
-            <div style={{ fontSize: '0.8rem', color: '#A5B4FC', marginBottom: '20px' }}>
-              DecentWork Cryptographic Hash: <strong>#8a20e-passport</strong>
+            <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginBottom: '20px', fontFamily: 'var(--font-mono)' }}>
+              Hash: #8a20e-passport
             </div>
-
-            <button
-              onClick={() => setIsShareModalOpen(false)}
-              className="btn-secondary"
-              style={{ width: '100%' }}
-            >
-              Close
-            </button>
+            <button onClick={() => setIsShareModalOpen(false)} className="btn-outline" style={{ width: '100%' }}>Close</button>
           </div>
         </div>
       )}
 
       {/* Add Skill Modal */}
       {isAddSkillOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.85)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '20px'
-        }}>
-          <div className="glass-panel" style={{
-            maxWidth: '400px',
-            width: '100%',
-            padding: '28px',
-            border: '1px solid rgba(0, 212, 170, 0.4)'
-          }}>
-            <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '6px' }}>
-              Add Skill for Employer Audit
-            </h3>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
-              Submit your trade certification or practical test for official verification.
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px' }}>
+          <div className="card" style={{ maxWidth: '400px', width: '100%', padding: '32px' }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '6px' }}>Add Skill for Audit</h3>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
+              Submit your trade certification for official verification.
             </p>
-
             <form onSubmit={handleAddSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
-                  Skill Name / Competency
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  placeholder="e.g. High-Voltage Cable Jointer or Emergency Biohazard Drill"
-                  style={{
-                    width: '100%',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '10px 14px',
-                    fontSize: '0.9rem',
-                    outline: 'none'
-                  }}
-                />
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>Skill / Competency</label>
+                <input type="text" required value={newTitle} onChange={e => setNewTitle(e.target.value)}
+                  placeholder="e.g. High-Voltage Cable Jointer" className="fs-input" />
               </div>
-
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
-                  Certifying Authority / Site
-                </label>
-                <input
-                  type="text"
-                  value={newIssuer}
-                  onChange={(e) => setNewIssuer(e.target.value)}
-                  placeholder="e.g. National Skill Council or Site Safety Directorate"
-                  style={{
-                    width: '100%',
-                    background: 'rgba(255, 255, 255, 0.05)',
-                    color: 'var(--text-primary)',
-                    border: '1px solid var(--border-subtle)',
-                    borderRadius: 'var(--radius-md)',
-                    padding: '10px 14px',
-                    fontSize: '0.9rem',
-                    outline: 'none'
-                  }}
-                />
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>Certifying Authority</label>
+                <input type="text" value={newIssuer} onChange={e => setNewIssuer(e.target.value)}
+                  placeholder="e.g. National Skill Council" className="fs-input" />
               </div>
-
-              <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                <button
-                  type="button"
-                  onClick={() => setIsAddSkillOpen(false)}
-                  className="btn-secondary"
-                  style={{ flex: 1 }}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="btn-primary"
-                  style={{ flex: 1 }}
-                >
-                  Save Skill
-                </button>
+              <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
+                <button type="button" onClick={() => setIsAddSkillOpen(false)} className="btn-outline" style={{ flex: 1 }}>Cancel</button>
+                <button type="submit" className="btn-black" style={{ flex: 1 }}>Save Skill</button>
               </div>
             </form>
           </div>

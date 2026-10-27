@@ -7,197 +7,102 @@ import SkillPassport from './SkillPassport';
 import { evaluateFatigueRisk } from '../../utils/fairshiftLogic';
 
 export default function WorkerPortal({
-  worker,
-  sector,
-  t,
-  currentLang,
-  activeShift,
-  setActiveShift,
-  hazards,
-  onReportHazard,
-  onSubmitFeedback,
-  onAddSkill,
-  onShiftCompleted,
-  isMobileFrame
+  worker, sector, t, currentLang, activeShift, setActiveShift,
+  hazards, onReportHazard, onSubmitFeedback, onAddSkill, onShiftCompleted
 }) {
-  const [activeTab, setActiveTab] = useState('shift'); // 'shift', 'payslip', 'safety', 'feedback', 'passport'
+  const [activeTab, setActiveTab] = useState('shift');
 
   const fatigueAnalysis = evaluateFatigueRisk(
-    worker.weeklyHours,
-    worker.lastShiftGapHours,
-    worker.consecutiveShifts
+    worker.weeklyHours, worker.lastShiftGapHours, worker.consecutiveShifts
   );
 
+  const tabs = [
+    { id: 'shift',    icon: '⏱', label: t.navShift },
+    { id: 'payslip',  icon: '💰', label: t.navPayslip },
+    { id: 'safety',   icon: '🚨', label: t.navSafety },
+    { id: 'feedback', icon: '🔒', label: t.navFeedback },
+    { id: 'passport', icon: '🏅', label: t.navPassport },
+  ];
+
   return (
-    <div style={{
-      maxWidth: isMobileFrame ? '440px' : '960px',
-      margin: '0 auto',
-      transition: 'all 0.3s ease'
-    }}>
-      
-      {/* Mobile Frame Container Styling if enabled */}
-      <div style={isMobileFrame ? {
-        border: '12px solid #1F2937',
-        borderRadius: '40px',
-        overflow: 'hidden',
-        boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.9)',
-        background: 'var(--bg-primary)',
-        padding: '16px 12px 24px',
-        position: 'relative'
-      } : {}}>
+    <div style={{ maxWidth: '1060px', margin: '0 auto' }}>
 
-        {/* Mobile top notch */}
-        {isMobileFrame && (
+      {/* Worker identity bar */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        flexWrap: 'wrap', gap: '12px', marginBottom: '24px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
           <div style={{
-            width: '120px',
-            height: '18px',
-            background: '#1F2937',
-            borderRadius: '0 0 14px 14px',
-            margin: '-16px auto 14px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            width: '52px', height: '52px', borderRadius: '14px',
+            background: '#0A0A0A',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '26px', flexShrink: 0,
           }}>
-            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#374151' }} />
+            {worker.avatar}
           </div>
-        )}
-
-        {/* Worker Greeting & Quick Fatigue Status */}
-        <div className="glass-panel" style={{
-          padding: '18px 20px',
-          marginBottom: '16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: '12px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              width: '46px',
-              height: '46px',
-              borderRadius: '50%',
-              background: 'linear-gradient(135deg, #00D4AA 0%, #6366F1 100%)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '24px',
-              border: '2px solid rgba(255, 255, 255, 0.15)'
-            }}>
-              {worker.avatar}
+          <div>
+            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              {t.welcomeBack}
             </div>
-            <div>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
-                {t.welcomeBack},
-              </div>
-              <h2 style={{ fontSize: '1.15rem', fontWeight: 800 }}>
-                {worker.name}
-              </h2>
-              <div style={{ fontSize: '0.75rem', color: '#00D4AA', fontWeight: 600 }}>
-                {worker.role}
-              </div>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em' }}>
+              {worker.name}
             </div>
-          </div>
-
-          {/* Fatigue Index Indicator */}
-          <div style={{ textAlign: isMobileFrame ? 'left' : 'right' }}>
-            <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
-              {t.fatigueRisk}
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+              {worker.role} · {sector.name}
             </div>
-            <span className={`pill-badge ${fatigueAnalysis.riskLevel === 'CRITICAL' ? 'pill-rose' : fatigueAnalysis.riskLevel === 'MODERATE' ? 'pill-amber' : 'pill-teal'}`} style={{ fontSize: '0.7rem' }}>
-              {fatigueAnalysis.riskLevel === 'CRITICAL' ? t.fatigueHigh : fatigueAnalysis.riskLevel === 'MODERATE' ? t.fatigueModerate : t.fatigueNormal}
-            </span>
           </div>
         </div>
 
-        {/* Navigation Tabs — large, clear touch targets */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(5, 1fr)',
-          gap: '6px',
-          background: 'rgba(255, 255, 255, 0.04)',
-          padding: '8px',
-          borderRadius: 'var(--radius-md)',
-          marginBottom: '24px',
-          border: '1px solid var(--border-subtle)'
-        }}>
-          {[
-            { id: 'shift', label: t.navShift, icon: '⏱️' },
-            { id: 'payslip', label: t.navPayslip, icon: '💰' },
-            { id: 'safety', label: t.navSafety, icon: '🚨' },
-            { id: 'feedback', label: t.navFeedback, icon: '🔒' },
-            { id: 'passport', label: t.navPassport, icon: '🏅' }
-          ].map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '12px 4px',
-                borderRadius: 'var(--radius-sm)',
-                background: activeTab === tab.id ? 'rgba(0, 212, 170, 0.18)' : 'transparent',
-                color: activeTab === tab.id ? '#00D4AA' : 'var(--text-secondary)',
-                border: activeTab === tab.id ? '1px solid rgba(0, 212, 170, 0.35)' : '1px solid transparent',
-                transition: 'all 0.2s',
-                gap: '4px'
-              }}
-            >
-              <span style={{ fontSize: '1.4rem' }}>{tab.icon}</span>
-              <span style={{ fontSize: '0.72rem', fontWeight: 700 }}>{tab.label}</span>
-            </button>
-          ))}
+        {/* Fatigue badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <span className="section-label">{t.fatigueRisk}:</span>
+          <span className={`badge ${fatigueAnalysis.riskLevel === 'CRITICAL' ? 'badge-red' : fatigueAnalysis.riskLevel === 'MODERATE' ? 'badge-amber' : 'badge-green'}`}>
+            {fatigueAnalysis.riskLevel === 'CRITICAL' ? t.fatigueHigh : fatigueAnalysis.riskLevel === 'MODERATE' ? t.fatigueModerate : t.fatigueNormal}
+          </span>
         </div>
+      </div>
 
-        {/* Tab Content Display */}
+      {/* Tab navigation */}
+      <div style={{
+        display: 'flex', gap: '6px', flexWrap: 'wrap',
+        marginBottom: '24px',
+      }}>
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`pill-toggle${activeTab === tab.id ? ' active' : ''}`}
+            style={{ fontSize: '0.84rem', padding: '9px 18px', gap: '6px' }}
+          >
+            <span>{tab.icon}</span> {tab.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Tab content */}
+      <div className="fade-in" key={activeTab}>
         {activeTab === 'shift' && (
-          <ShiftTracker
-            worker={worker}
-            sector={sector}
-            t={t}
-            activeShift={activeShift}
-            setActiveShift={setActiveShift}
-            onShiftCompleted={onShiftCompleted}
-          />
+          <ShiftTracker worker={worker} sector={sector} t={t}
+            activeShift={activeShift} setActiveShift={setActiveShift}
+            onShiftCompleted={onShiftCompleted} />
         )}
-
         {activeTab === 'payslip' && (
-          <PayslipView
-            worker={worker}
-            sector={sector}
-            t={t}
-          />
+          <PayslipView worker={worker} sector={sector} t={t} />
         )}
-
         {activeTab === 'safety' && (
-          <SafetyReport
-            sector={sector}
-            t={t}
-            currentLang={currentLang}
+          <SafetyReport sector={sector} t={t} currentLang={currentLang}
             hazards={hazards.filter(h => h.sector === sector.id)}
-            onReportHazard={onReportHazard}
-          />
+            onReportHazard={onReportHazard} />
         )}
-
         {activeTab === 'feedback' && (
-          <AnonymousFeedback
-            sector={sector}
-            t={t}
-            onSubmitFeedback={onSubmitFeedback}
-          />
+          <AnonymousFeedback sector={sector} t={t}
+            onSubmitFeedback={onSubmitFeedback} />
         )}
-
         {activeTab === 'passport' && (
-          <SkillPassport
-            worker={worker}
-            sector={sector}
-            t={t}
-            onAddSkill={onAddSkill}
-          />
+          <SkillPassport worker={worker} sector={sector} t={t}
+            onAddSkill={onAddSkill} />
         )}
-
       </div>
 
     </div>

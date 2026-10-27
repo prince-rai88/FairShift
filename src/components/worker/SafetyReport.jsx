@@ -9,312 +9,186 @@ export default function SafetyReport({ sector, t, currentLang, hazards, onReport
   const [audioAttached, setAudioAttached] = useState(false);
   const [submittedAlert, setSubmittedAlert] = useState(false);
 
-  // Voice Input via Web Speech API
   const handleVoiceRecord = () => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
     if (!SpeechRecognition) {
-      // Graceful fallback simulation if browser microphone is disabled
       setIsRecording(true);
       setTimeout(() => {
-        setIsRecording(false);
-        setAudioAttached(true);
-        const demoNote = currentLang === 'hi'
-          ? "चौथी मंजिल पर पाड़ कमजोर है, सुरक्षा बेल्ट का हुक टूटा हुआ है।"
-          : currentLang === 'ta'
-          ? "4-வது தளத்தில் சாரக்கட்டு பலவீனமாக உள்ளது, பாதுகாப்பு பெல்ட் கொக்கி உடைந்துள்ளது."
-          : "Scaffolding clamp on 4th floor perimeter is loose and vibrating heavily.";
-        setDescription(prev => prev ? `${prev} [Voice Note]: ${demoNote}` : demoNote);
+        setIsRecording(false); setAudioAttached(true);
+        const demo = "Scaffolding clamp on 4th floor perimeter is loose and vibrating heavily.";
+        setDescription(prev => prev ? `${prev} [Voice Note]: ${demo}` : demo);
       }, 2500);
       return;
     }
-
     try {
-      const recognition = new SpeechRecognition();
-      recognition.lang = currentLang === 'hi' ? 'hi-IN' : currentLang === 'ta' ? 'ta-IN' : 'en-US';
-      recognition.continuous = false;
-      recognition.interimResults = false;
-
-      recognition.onstart = () => {
-        setIsRecording(true);
-      };
-
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        setDescription(prev => prev ? `${prev} ${transcript}` : transcript);
-        setAudioAttached(true);
-        setIsRecording(false);
-      };
-
-      recognition.onerror = () => {
-        setIsRecording(false);
-        setAudioAttached(true);
-      };
-
-      recognition.onend = () => {
-        setIsRecording(false);
-      };
-
-      recognition.start();
-    } catch {
-      setIsRecording(false);
-      setAudioAttached(true);
-    }
+      const r = new SpeechRecognition();
+      r.lang = currentLang === 'hi' ? 'hi-IN' : currentLang === 'ta' ? 'ta-IN' : 'en-US';
+      r.onstart = () => setIsRecording(true);
+      r.onresult = (e) => { setDescription(p => p ? `${p} ${e.results[0][0].transcript}` : e.results[0][0].transcript); setAudioAttached(true); setIsRecording(false); };
+      r.onerror = () => { setIsRecording(false); setAudioAttached(true); };
+      r.onend = () => setIsRecording(false);
+      r.start();
+    } catch { setIsRecording(false); setAudioAttached(true); }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const hazardCategoryName = t[category] || category;
-    
     if (onReportHazard) {
-      onReportHazard({
-        sector: sector.id,
-        category: hazardCategoryName,
-        location: locationNote || `${sector.name} Floor 3`,
-        description: description || "Hazard reported by on-site worker alert.",
-        priority,
-        audioAttached
-      });
+      onReportHazard({ sector: sector.id, category: hazardCategoryName, location: locationNote || `${sector.name} Floor 3`, description: description || 'Hazard reported by on-site worker.', priority, audioAttached });
     }
+    setSubmittedAlert(true); setDescription(''); setLocationNote(''); setAudioAttached(false);
+    setTimeout(() => setSubmittedAlert(false), 4000);
+  };
 
-    setSubmittedAlert(true);
-    setDescription('');
-    setLocationNote('');
-    setAudioAttached(false);
-
-    setTimeout(() => {
-      setSubmittedAlert(false);
-    }, 4000);
+  const priorityColors = {
+    MEDIUM:   { bg: '#EFF6FF', border: '#BFDBFE', color: 'var(--accent-blue)' },
+    HIGH:     { bg: '#FFFBEB', border: '#FDE68A', color: 'var(--accent-amber)' },
+    CRITICAL: { bg: '#FEF2F2', border: '#FECACA', color: 'var(--accent-red)' },
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      
-      {/* Safety Banner */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <span className="pill-badge pill-rose">SDG 8.8 Safe Workplaces</span>
-          <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-            Zero-Retaliation Protection Active
-          </span>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
+
+      {/* LEFT — Report Form */}
+      <div className="card" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <span className="section-num">1</span>
+          <span className="section-label">Report a Hazard</span>
         </div>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>{t.safetyTitle}</h2>
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>{t.safetySubtitle}</p>
+        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+          {t.safetySubtitle} — Zero-retaliation protection active.
+        </p>
 
         {submittedAlert && (
           <div style={{
-            background: 'rgba(0, 212, 170, 0.15)',
-            border: '1px solid #00D4AA',
-            borderRadius: 'var(--radius-md)',
-            padding: '14px 18px',
-            marginTop: '16px',
-            color: '#00D4AA',
-            fontWeight: 700,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '10px'
+            background: '#F0FDF4', border: '1.5px solid #86EFAC', borderRadius: 'var(--radius-md)',
+            padding: '12px 16px', marginBottom: '20px', color: 'var(--accent-green)', fontWeight: 700,
+            display: 'flex', alignItems: 'center', gap: '8px',
           }}>
-            <span>🚨</span>
-            <span>{t.reportSuccess}</span>
+            ✅ {t.reportSuccess}
           </div>
         )}
 
-        {/* Hazard Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginTop: '20px' }}>
-          
-          {/* Category Dropdown */}
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+          {/* Category */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
               {t.hazardType}
             </label>
-            <select
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              style={{
-                width: '100%',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-md)',
-                padding: '12px 14px',
-                fontSize: '0.95rem',
-                outline: 'none'
-              }}
-            >
-              <option value="hazardFall" style={{ background: '#0E1526' }}>⚠️ {t.hazardFall}</option>
-              <option value="hazardChemical" style={{ background: '#0E1526' }}>🧪 {t.hazardChemical}</option>
-              <option value="hazardElectrical" style={{ background: '#0E1526' }}>⚡ {t.hazardElectrical}</option>
-              <option value="hazardMachinery" style={{ background: '#0E1526' }}>🏗️ {t.hazardMachinery}</option>
-              <option value="hazardPPE" style={{ background: '#0E1526' }}>🦺 {t.hazardPPE}</option>
-              <option value="hazardSanitation" style={{ background: '#0E1526' }}>🚰 {t.hazardSanitation}</option>
+            <select value={category} onChange={e => setCategory(e.target.value)} className="fs-input">
+              <option value="hazardFall">⚠️ {t.hazardFall}</option>
+              <option value="hazardChemical">🧪 {t.hazardChemical}</option>
+              <option value="hazardElectrical">⚡ {t.hazardElectrical}</option>
+              <option value="hazardMachinery">🏗️ {t.hazardMachinery}</option>
+              <option value="hazardPPE">🦺 {t.hazardPPE}</option>
+              <option value="hazardSanitation">🚰 {t.hazardSanitation}</option>
             </select>
           </div>
 
-          {/* Location details */}
+          {/* Location */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
               {t.locationNote}
             </label>
-            <input
-              type="text"
-              value={locationNote}
-              onChange={(e) => setLocationNote(e.target.value)}
-              placeholder="e.g. Tower B - 12th Floor exterior or Ward 4 Sanitation chute"
-              style={{
-                width: '100%',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-md)',
-                padding: '12px 14px',
-                fontSize: '0.92rem',
-                outline: 'none'
-              }}
-            />
+            <input type="text" value={locationNote} onChange={e => setLocationNote(e.target.value)}
+              placeholder="e.g. Tower B - 12th Floor, Ward 4 Sanitation" className="fs-input" />
           </div>
 
-          {/* Voice Note Button with Soundwave effect */}
+          {/* Voice / Text */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
-              Multilingual Voice or Text Report
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+              Description (Voice or Text)
             </label>
-            
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginBottom: '10px' }}>
-              <button
-                type="button"
-                onClick={handleVoiceRecord}
-                style={{
-                  background: isRecording ? '#EF4444' : 'rgba(239, 68, 68, 0.15)',
-                  border: '1px solid rgba(239, 68, 68, 0.4)',
-                  color: isRecording ? '#FFFFFF' : '#F87171',
-                  borderRadius: 'var(--radius-md)',
-                  padding: '12px 20px',
-                  fontWeight: 700,
-                  fontSize: '0.9rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  transition: 'all 0.2s'
-                }}
-              >
-                <span>🎙️</span>
-                {isRecording ? t.recordingActive : t.voiceReportBtn}
-              </button>
-
-              {isRecording && (
-                <div style={{ display: 'flex', alignItems: 'center', height: '24px' }}>
-                  <span className="wave-bar" />
-                  <span className="wave-bar" />
-                  <span className="wave-bar" />
-                  <span className="wave-bar" />
-                </div>
-              )}
-
-              {audioAttached && !isRecording && (
-                <span className="pill-badge pill-teal" style={{ fontSize: '0.75rem' }}>
-                  ✓ Voice Audio Attached
-                </span>
-              )}
-            </div>
-
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Spoken words will automatically transcribe here, or you can type directly..."
+            <button
+              type="button" onClick={handleVoiceRecord}
               style={{
-                width: '100%',
-                background: 'rgba(255, 255, 255, 0.05)',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-subtle)',
-                borderRadius: 'var(--radius-md)',
-                padding: '12px 14px',
-                fontSize: '0.92rem',
-                outline: 'none',
-                fontFamily: 'inherit'
+                display: 'flex', alignItems: 'center', gap: '8px',
+                background: isRecording ? 'var(--accent-red)' : 'var(--bg-page)',
+                border: `1.5px solid ${isRecording ? 'var(--accent-red)' : 'var(--border-dark)'}`,
+                borderRadius: 'var(--radius-md)', padding: '10px 18px',
+                fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '0.88rem',
+                color: isRecording ? '#fff' : 'var(--text-primary)',
+                cursor: 'pointer', marginBottom: '10px', transition: 'all 0.15s',
               }}
-            />
+            >
+              🎙️ {isRecording ? t.recordingActive : t.voiceReportBtn}
+              {isRecording && <span className="pulse-dot" style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#fff', display: 'inline-block' }} />}
+            </button>
+            {audioAttached && !isRecording && <span className="badge badge-green" style={{ marginBottom: '8px', display: 'inline-flex' }}>✓ Voice Attached</span>}
+            <textarea rows={3} value={description} onChange={e => setDescription(e.target.value)}
+              placeholder="Voice will transcribe here, or type directly..." className="fs-input" />
           </div>
 
-          {/* Priority Options */}
+          {/* Urgency */}
           <div>
-            <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 600, marginBottom: '6px' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
               Urgency Level
             </label>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              {['MEDIUM', 'HIGH', 'CRITICAL'].map((lvl) => (
+            <div style={{ display: 'flex', gap: '8px' }}>
+              {['MEDIUM', 'HIGH', 'CRITICAL'].map(lvl => (
                 <button
-                  key={lvl}
-                  type="button"
-                  onClick={() => setPriority(lvl)}
+                  key={lvl} type="button" onClick={() => setPriority(lvl)}
                   style={{
-                    flex: 1,
-                    padding: '8px 12px',
-                    borderRadius: 'var(--radius-sm)',
-                    fontWeight: 700,
-                    fontSize: '0.8rem',
-                    background: priority === lvl 
-                      ? (lvl === 'CRITICAL' ? '#EF4444' : lvl === 'HIGH' ? '#F59E0B' : '#6366F1')
-                      : 'rgba(255, 255, 255, 0.04)',
-                    color: priority === lvl ? '#FFFFFF' : 'var(--text-secondary)',
-                    border: '1px solid var(--border-subtle)'
+                    flex: 1, padding: '10px 8px', borderRadius: 'var(--radius-md)', fontWeight: 700,
+                    fontSize: '0.82rem', cursor: 'pointer', fontFamily: 'var(--font-sans)',
+                    background: priority === lvl ? priorityColors[lvl].bg : 'var(--bg-page)',
+                    color: priority === lvl ? priorityColors[lvl].color : 'var(--text-muted)',
+                    border: `1.5px solid ${priority === lvl ? priorityColors[lvl].border : 'var(--border)'}`,
+                    transition: 'all 0.15s',
                   }}
                 >
-                  {lvl === 'CRITICAL' ? '🚨 ' : lvl === 'HIGH' ? '⚠️ ' : 'ℹ️ '}
-                  {lvl}
+                  {lvl === 'CRITICAL' ? '🚨 ' : lvl === 'HIGH' ? '⚠️ ' : 'ℹ️ '}{lvl}
                 </button>
               ))}
             </div>
           </div>
 
-          <button
-            type="submit"
-            className="btn-danger"
-            style={{ width: '100%', padding: '14px', marginTop: '10px', fontSize: '1rem' }}
-          >
-            <span>🚨</span> {t.submitReport}
+          <button type="submit" className="btn-red" style={{ width: '100%', padding: '15px', marginTop: '4px', fontSize: '1rem' }}>
+            🚨 {t.submitReport}
           </button>
         </form>
       </div>
 
-      {/* Incident Status Tracker */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '14px' }}>
-          {t.activeIncidents}
-        </h3>
+      {/* RIGHT — Active Incidents */}
+      <div className="card" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+          <span className="section-num">2</span>
+          <span className="section-label">{t.activeIncidents}</span>
+        </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {hazards.map((haz) => (
+          {hazards.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '32px', color: 'var(--text-muted)', fontSize: '0.9rem' }}>
+              ✅ No active hazards on this site
+            </div>
+          )}
+          {hazards.map(haz => (
             <div key={haz.id} style={{
-              padding: '16px',
-              background: 'rgba(255, 255, 255, 0.02)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-subtle)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '6px'
+              padding: '16px', background: 'var(--bg-page)',
+              borderRadius: 'var(--radius-md)', border: '1.5px solid var(--border)',
             }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
-                <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#F8FAFC' }}>
-                  {haz.category}
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                  <span className={`pill-badge ${haz.priority === 'CRITICAL' ? 'pill-rose' : 'pill-amber'}`}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
+                <div style={{ fontWeight: 700, fontSize: '0.92rem' }}>{haz.category}</div>
+                <div style={{ display: 'flex', gap: '6px' }}>
+                  <span className={`badge ${haz.priority === 'CRITICAL' ? 'badge-red' : haz.priority === 'HIGH' ? 'badge-amber' : 'badge-blue'}`}>
                     {haz.priority}
                   </span>
-                  <span className={`pill-badge ${haz.status.includes('Resolved') ? 'pill-teal' : 'pill-purple'}`}>
+                  <span className={`badge ${haz.status.includes('Resolved') ? 'badge-green' : 'badge-gray'}`}>
                     {haz.status}
                   </span>
                 </div>
               </div>
-
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                📍 {haz.location} • <em>{haz.timestamp}</em>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                📍 {haz.location} · {haz.timestamp}
               </div>
-
-              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', fontStyle: 'italic' }}>
                 "{haz.description}"
               </div>
+              {haz.audioAttached && (
+                <div style={{ marginTop: '8px' }}><span className="badge badge-blue">🎙️ Audio Attached</span></div>
+              )}
             </div>
           ))}
         </div>

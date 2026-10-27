@@ -2,225 +2,162 @@ import React from 'react';
 import { calculateShiftPay } from '../../utils/fairshiftLogic';
 
 export default function PayslipView({ worker, sector, t }) {
-  // Compute monthly representative payslip
   const monthlyHours = worker.totalHours || 176;
   const payCalc = calculateShiftPay(monthlyHours, worker.hourlyRate, worker.hazardRate);
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const rows = [
+    { label: t.baseWage, sub: `${payCalc.standardHours}h @ ₹${payCalc.hourlyRate}/hr`, value: `₹${payCalc.basePay.toLocaleString()}`, color: 'var(--text-primary)', sign: '' },
+    { label: t.overtimePay, sub: `${payCalc.overtimeHours}h @ ₹${(payCalc.hourlyRate * 1.5).toFixed(0)}/hr (1.5×)`, value: `₹${payCalc.overtimePay.toLocaleString()}`, color: 'var(--accent-green)', sign: '+' },
+    { label: t.hazardAllowance, sub: `High-risk site allowance @ ₹${payCalc.hazardRate}/hr`, value: `₹${payCalc.hazardPay.toLocaleString()}`, color: 'var(--accent-amber)', sign: '+' },
+  ];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      
-      {/* Header Summary */}
-      <div className="glass-panel" style={{ padding: '24px', position: 'relative' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-              <span className="pill-badge pill-teal">SDG 8.5 Fair Compensation</span>
-              <span style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                Cycle: October 2026
-              </span>
-            </div>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>{t.payslipTitle}</h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)' }}>{t.payslipSubtitle}</p>
-          </div>
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
 
-          <button
-            onClick={handlePrint}
-            className="btn-secondary"
-            style={{ fontSize: '0.85rem' }}
-          >
-            <span>📄</span> {t.downloadSlip}
-          </button>
+      {/* LEFT — Earnings Breakdown */}
+      <div className="card" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+          <span className="section-num">1</span>
+          <span className="section-label">Earnings Breakdown</span>
+        </div>
+        <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+          October 2026 · {t.payslipSubtitle}
         </div>
 
-        {/* Worker Summary Row */}
+        {/* Worker info row */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-          gap: '16px',
-          marginTop: '20px',
-          padding: '16px',
-          background: 'rgba(255, 255, 255, 0.02)',
-          borderRadius: 'var(--radius-md)',
-          border: '1px solid var(--border-subtle)'
+          background: 'var(--bg-page)', borderRadius: 'var(--radius-md)',
+          padding: '14px 16px', marginBottom: '20px',
+          border: '1.5px solid var(--border)',
         }}>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Worker Name & ID</div>
-            <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{worker.name}</div>
-            <div style={{ fontSize: '0.75rem', color: '#00D4AA' }}>{worker.id}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
+            <span style={{ color: 'var(--text-muted)' }}>Worker</span>
+            <span style={{ fontWeight: 700 }}>{worker.name}</span>
           </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Organization / Site</div>
-            <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{sector.name}</div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{worker.role}</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
+            <span style={{ color: 'var(--text-muted)' }}>ID</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontWeight: 600 }}>{worker.id}</span>
           </div>
-          <div>
-            <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Standard Hourly Rate</div>
-            <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>₹{worker.hourlyRate}/hr</div>
-            <div style={{ fontSize: '0.75rem', color: '#F59E0B' }}>Overtime: ₹{(worker.hourlyRate * 1.5).toFixed(0)}/hr (1.5x)</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
+            <span style={{ color: 'var(--text-muted)' }}>Site</span>
+            <span style={{ fontWeight: 600 }}>{sector.name}</span>
           </div>
         </div>
-      </div>
 
-      {/* Main Transparent Calculation Breakdown */}
-      <div className="glass-panel" style={{ padding: '24px' }}>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '16px' }}>
-          Earnings Breakdown — Full Transparency
-        </h3>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          
-          {/* Base Wage */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px',
-            background: 'rgba(255, 255, 255, 0.03)',
-            borderRadius: 'var(--radius-sm)'
-          }}>
-            <div>
-              <div style={{ fontWeight: 600 }}>{t.baseWage}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                {payCalc.standardHours} standard hours @ ₹{payCalc.hourlyRate}/hr
-              </div>
-            </div>
-            <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#F8FAFC' }}>
-              ₹{payCalc.basePay.toLocaleString()}
-            </div>
-          </div>
-
-          {/* Overtime Premium */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px',
-            background: 'rgba(0, 212, 170, 0.06)',
-            borderRadius: 'var(--radius-sm)',
-            borderLeft: '4px solid #00D4AA'
-          }}>
-            <div>
-              <div style={{ fontWeight: 600, color: '#00D4AA' }}>{t.overtimePay}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                {payCalc.overtimeHours} verified overtime hours @ 1.5x statutory multiplier (₹{(payCalc.hourlyRate * 1.5).toFixed(0)}/hr)
-              </div>
-            </div>
-            <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#00D4AA' }}>
-              + ₹{payCalc.overtimePay.toLocaleString()}
-            </div>
-          </div>
-
-          {/* Hazard Allowance */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px',
-            background: 'rgba(245, 158, 11, 0.06)',
-            borderRadius: 'var(--radius-sm)',
-            borderLeft: '4px solid #F59E0B'
-          }}>
-            <div>
-              <div style={{ fontWeight: 600, color: '#FBBF24' }}>{t.hazardAllowance}</div>
-              <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                Special high-risk worksite allowance @ ₹{payCalc.hazardRate}/hr
-              </div>
-            </div>
-            <div style={{ fontWeight: 700, fontSize: '1.05rem', color: '#FBBF24' }}>
-              + ₹{payCalc.hazardPay.toLocaleString()}
-            </div>
-          </div>
-
-          {/* Gross Subtotal */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            padding: '14px 16px',
-            borderTop: '1px solid var(--border-subtle)',
-            borderBottom: '1px solid var(--border-subtle)',
-            fontSize: '1rem',
-            fontWeight: 700
-          }}>
-            <div>{t.grossEarned}</div>
-            <div>₹{payCalc.grossEarnings.toLocaleString()}</div>
-          </div>
-
-          {/* Statutory Deductions */}
-          <div style={{
-            padding: '14px 16px',
-            background: 'rgba(239, 68, 68, 0.04)',
-            borderRadius: 'var(--radius-sm)',
-            borderLeft: '4px solid #EF4444'
-          }}>
-            <div style={{ fontWeight: 600, color: '#F87171', marginBottom: '8px' }}>
-              {t.statutoryDeductions}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '4px' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>• Employees Provident Fund (PF 12%):</span>
-              <span style={{ fontWeight: 600 }}>- ₹{payCalc.pfDeduction.toLocaleString()}</span>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-              <span style={{ color: 'var(--text-secondary)' }}>• Employee State Insurance (ESI 0.75%):</span>
-              <span style={{ fontWeight: 600 }}>- ₹{payCalc.esiDeduction.toLocaleString()}</span>
-            </div>
-          </div>
-
-          {/* Final Net Take-Home */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '20px',
-            background: 'linear-gradient(135deg, rgba(0, 212, 170, 0.15) 0%, rgba(99, 102, 241, 0.15) 100%)',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid rgba(0, 212, 170, 0.4)',
-            marginTop: '8px'
-          }}>
-            <div>
-              <div style={{ fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#00D4AA', fontWeight: 700 }}>
-                {t.netTakeHome}
-              </div>
-              <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
-                Directly credited to worker bank account (Aadhaar Linked)
-              </div>
-            </div>
-            <div style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: '2.4rem',
-              fontWeight: 800,
-              color: '#F8FAFC'
+        {/* Line items */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
+          {rows.map((row, i) => (
+            <div key={i} style={{
+              display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              padding: '12px 14px',
+              background: 'var(--bg-page)', borderRadius: 'var(--radius-md)',
+              border: '1.5px solid var(--border)',
             }}>
-              ₹{payCalc.netTakeHome.toLocaleString()}
+              <div>
+                <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{row.label}</div>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginTop: '2px' }}>{row.sub}</div>
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, color: row.color }}>
+                {row.sign}{row.value}
+              </div>
             </div>
-          </div>
-
+          ))}
         </div>
 
-        {/* Verification Footer */}
+        {/* Gross */}
         <div style={{
-          marginTop: '20px',
-          paddingTop: '16px',
-          borderTop: '1px solid var(--border-subtle)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          fontSize: '0.78rem',
-          color: 'var(--text-muted)',
-          flexWrap: 'wrap',
-          gap: '8px'
+          display: 'flex', justifyContent: 'space-between',
+          padding: '12px 14px',
+          borderTop: '1.5px solid var(--border)', borderBottom: '1.5px solid var(--border)',
+          marginBottom: '10px', fontWeight: 700,
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span>🔒</span>
-            <span>Cryptographic Proof: <strong>0x7f1a...892e</strong></span>
+          <span>{t.grossEarned}</span>
+          <span style={{ fontFamily: 'var(--font-mono)' }}>₹{payCalc.grossEarnings.toLocaleString()}</span>
+        </div>
+
+        {/* Deductions */}
+        <div style={{
+          padding: '12px 14px',
+          background: '#FEF2F2', borderRadius: 'var(--radius-md)',
+          border: '1.5px solid #FECACA', marginBottom: '16px',
+        }}>
+          <div style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--accent-red)', marginBottom: '8px' }}>
+            {t.statutoryDeductions}
           </div>
-          <div>Audited against ILO Fair Labor Convention No. 95</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.83rem', marginBottom: '5px' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>PF (Provident Fund 12%)</span>
+            <span style={{ fontWeight: 700 }}>- ₹{payCalc.pfDeduction.toLocaleString()}</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.83rem' }}>
+            <span style={{ color: 'var(--text-secondary)' }}>ESI (Employee State Insurance 0.75%)</span>
+            <span style={{ fontWeight: 700 }}>- ₹{payCalc.esiDeduction.toLocaleString()}</span>
+          </div>
+        </div>
+
+        {/* Net take-home — hero */}
+        <div style={{
+          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+          padding: '20px',
+          background: 'var(--accent-black)', borderRadius: 'var(--radius-lg)',
+          color: '#fff',
+        }}>
+          <div>
+            <div style={{ fontSize: '0.72rem', letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.7, marginBottom: '4px' }}>
+              {t.netTakeHome}
+            </div>
+            <div style={{ fontSize: '0.78rem', opacity: 0.6 }}>Direct to bank · Aadhaar linked</div>
+          </div>
+          <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2.5rem', fontWeight: 700 }}>
+            ₹{payCalc.netTakeHome.toLocaleString()}
+          </div>
         </div>
       </div>
 
+      {/* RIGHT — Transparency & Print */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+        <div className="card" style={{ padding: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <span className="section-num">2</span>
+            <span className="section-label">Transparency Proof</span>
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              { icon: '🔒', label: 'Cryptographic Proof', value: '0x7f1a...892e', mono: true },
+              { icon: '📜', label: 'Audited Against', value: 'ILO Fair Labor Convention No. 95', mono: false },
+              { icon: '🏦', label: 'Disbursement', value: 'Direct Bank Transfer (Aadhaar DBT)', mono: false },
+              { icon: '⚖️', label: 'Compliance', value: 'Min. Wages Act · Factories Act', mono: false },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: 'flex', gap: '12px', alignItems: 'flex-start',
+                padding: '12px', background: 'var(--bg-page)',
+                borderRadius: 'var(--radius-md)', border: '1.5px solid var(--border)',
+              }}>
+                <span style={{ fontSize: '1.2rem' }}>{item.icon}</span>
+                <div>
+                  <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>{item.label}</div>
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', fontFamily: item.mono ? 'var(--font-mono)' : 'inherit', marginTop: '2px' }}>{item.value}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="card" style={{ padding: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <span className="section-num">3</span>
+            <span className="section-label">Download</span>
+          </div>
+          <button onClick={() => window.print()} className="btn-black" style={{ width: '100%', padding: '14px' }}>
+            📄 {t.downloadSlip}
+          </button>
+          <p style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '10px', textAlign: 'center' }}>
+            PDF includes QR code for instant verification
+          </p>
+        </div>
+
+      </div>
     </div>
   );
 }

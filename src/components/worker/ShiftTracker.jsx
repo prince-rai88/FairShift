@@ -1,62 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { calculateShiftPay } from '../../utils/fairshiftLogic';
 
-export default function ShiftTracker({ 
-  worker, 
-  sector, 
-  t, 
-  activeShift, 
-  setActiveShift, 
-  onShiftCompleted 
-}) {
+export default function ShiftTracker({ worker, sector, t, activeShift, setActiveShift, onShiftCompleted }) {
   const [elapsedSeconds, setElapsedSeconds] = useState(activeShift ? activeShift.elapsedSeconds || 28800 : 0);
   const [isQrModalOpen, setIsQrModalOpen] = useState(false);
   const [qrScanning, setQrScanning] = useState(false);
   const [qrSuccessMessage, setQrSuccessMessage] = useState(null);
 
-  // Live timer tick when shift is active
   useEffect(() => {
     let interval = null;
     if (activeShift) {
-      interval = setInterval(() => {
-        setElapsedSeconds(prev => prev + 1);
-      }, 1000);
+      interval = setInterval(() => setElapsedSeconds(prev => prev + 1), 1000);
     }
     return () => clearInterval(interval);
   }, [activeShift]);
 
   const hoursWorked = elapsedSeconds / 3600;
-  const payCalculation = calculateShiftPay(
-    hoursWorked,
-    worker.hourlyRate,
-    worker.hazardRate
-  );
+  const payCalculation = calculateShiftPay(hoursWorked, worker.hourlyRate, worker.hazardRate);
+  const isOvertime = hoursWorked > 8.0;
 
-  const formatTime = (totalSeconds) => {
-    const hrs = Math.floor(totalSeconds / 3600);
-    const mins = Math.floor((totalSeconds % 3600) / 60);
-    const secs = totalSeconds % 60;
-    return `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const formatTime = (total) => {
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = total % 60;
+    return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
   };
 
-  // Simulate scanning QR at worksite gate
   const handleScanQr = () => {
-    setIsQrModalOpen(true);
-    setQrScanning(true);
-    setQrSuccessMessage(null);
-
+    setIsQrModalOpen(true); setQrScanning(true); setQrSuccessMessage(null);
     setTimeout(() => {
       setQrScanning(false);
-      setQrSuccessMessage(`Verified Geofence at ${sector.name} - Gate 4`);
-      
-      // Auto Punch IN
+      setQrSuccessMessage(`Verified at ${sector.name} — Gate 4`);
       setTimeout(() => {
         setIsQrModalOpen(false);
-        setActiveShift({
-          startTime: new Date().toLocaleTimeString(),
-          location: `${sector.name} — Gate 4 Geofence`,
-          elapsedSeconds: 0
-        });
+        setActiveShift({ startTime: new Date().toLocaleTimeString(), location: `${sector.name} — Gate 4`, elapsedSeconds: 0 });
         setElapsedSeconds(0);
       }, 1200);
     }, 1800);
@@ -66,300 +43,213 @@ export default function ShiftTracker({
     if (!activeShift) return;
     const finalHours = Math.max(1, parseFloat(hoursWorked.toFixed(1)));
     const finalPay = calculateShiftPay(finalHours, worker.hourlyRate, worker.hazardRate);
-    
     if (onShiftCompleted) {
-      onShiftCompleted({
-        date: "Today (Just Completed)",
-        hours: finalHours,
-        base: finalPay.basePay,
-        ot: finalPay.overtimePay,
-        net: finalPay.netTakeHome,
-        status: "Verified & Audited"
-      });
+      onShiftCompleted({ date: 'Today (Just Completed)', hours: finalHours, base: finalPay.basePay, ot: finalPay.overtimePay, net: finalPay.netTakeHome, status: 'Verified & Audited' });
     }
-
-    setActiveShift(null);
-    setElapsedSeconds(0);
+    setActiveShift(null); setElapsedSeconds(0);
   };
 
-  const isOvertime = hoursWorked > 8.0;
-
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      
-      {/* Active Shift Card */}
-      <div className="glass-panel" style={{
-        padding: '32px 28px',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        {/* Glow backdrop based on shift status */}
-        <div style={{
-          position: 'absolute',
-          top: '-50px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '280px',
-          height: '280px',
-          borderRadius: '50%',
-          background: activeShift 
-            ? (isOvertime ? 'radial-gradient(circle, rgba(239, 68, 68, 0.2) 0%, transparent 65%)' : 'radial-gradient(circle, rgba(0, 212, 170, 0.18) 0%, transparent 65%)')
-            : 'radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 65%)',
-          pointerEvents: 'none'
-        }} />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
 
-        {/* Status Badge + Location */}
-        <div style={{ marginBottom: '20px' }}>
-          <span className={`pill-badge ${activeShift ? (isOvertime ? 'pill-rose' : 'pill-teal') : 'pill-purple'}`}>
-            {activeShift ? (isOvertime ? '● OVERTIME ACTIVE (1.5x Rate)' : '● ON-SITE SHIFT ACTIVE') : '○ NO ACTIVE SHIFT'}
-          </span>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '8px' }}>
-            {activeShift ? activeShift.location : sector.location}
+      {/* LEFT — Live Shift Panel */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+        {/* ① SHIFT STATUS */}
+        <div className="card" style={{ padding: '28px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <span className="section-num">1</span>
+            <span className="section-label">Shift Status</span>
           </div>
-        </div>
 
-        {/* Live Timer Display */}
-        <div style={{
-          fontFamily: 'var(--font-display)',
-          fontSize: '4.2rem',
-          fontWeight: 800,
-          letterSpacing: '-0.04em',
-          color: isOvertime ? '#F87171' : '#F8FAFC',
-          textShadow: activeShift ? '0 0 30px rgba(0, 212, 170, 0.35)' : 'none',
-          marginBottom: '6px',
-          lineHeight: 1
-        }}>
-          {formatTime(elapsedSeconds)}
-        </div>
-
-        <div style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '28px' }}>
-          {activeShift 
-            ? `${t.currentShiftTime} • Clocked in at ${activeShift.startTime}` 
-            : t.noActiveShift}
-        </div>
-
-        {/* Overtime Notice Banner */}
-        {isOvertime && (
-          <div style={{
-            background: 'rgba(239, 68, 68, 0.12)',
-            border: '1px solid rgba(239, 68, 68, 0.35)',
-            borderRadius: 'var(--radius-md)',
-            padding: '12px 16px',
-            marginBottom: '20px',
-            fontSize: '0.88rem',
-            color: '#FCA5A5',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px'
-          }}>
-            <span>⚠️</span>
-            <span>{t.overtimeWarning} (+1.5x Premium: ₹{(worker.hourlyRate * 1.5).toFixed(0)}/hr)</span>
+          {/* Timer */}
+          <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+            <div style={{
+              fontFamily: 'var(--font-mono)',
+              fontSize: '3.8rem',
+              fontWeight: 700,
+              letterSpacing: '-0.02em',
+              color: isOvertime ? 'var(--accent-red)' : 'var(--text-primary)',
+              lineHeight: 1,
+              marginBottom: '8px',
+            }}>
+              {formatTime(elapsedSeconds)}
+            </div>
+            <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
+              {activeShift
+                ? `On-site since ${activeShift.startTime} · ${activeShift.location}`
+                : t.noActiveShift}
+            </div>
+            {activeShift && (
+              <div style={{ marginTop: '10px' }}>
+                <span className={`badge ${isOvertime ? 'badge-red' : 'badge-green'}`}>
+                  {isOvertime ? '● OVERTIME ACTIVE (1.5x)' : '● ON-SITE ACTIVE'}
+                </span>
+              </div>
+            )}
           </div>
-        )}
 
-        {/* Live Earnings — prominent center piece when shift is active */}
+          {/* Overtime notice */}
+          {isOvertime && (
+            <div style={{
+              background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 'var(--radius-md)',
+              padding: '10px 14px', fontSize: '0.84rem', color: 'var(--accent-red)', marginBottom: '18px',
+              display: 'flex', alignItems: 'center', gap: '8px',
+            }}>
+              ⚠️ {t.overtimeWarning}
+            </div>
+          )}
+
+          {/* Punch buttons */}
+          {!activeShift ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button id="punch-in-qr" onClick={handleScanQr} className="btn-black" style={{ width: '100%', padding: '16px', fontSize: '1rem' }}>
+                📷 {t.simulatedQr}
+              </button>
+              <button
+                id="punch-in-quick"
+                onClick={() => { setActiveShift({ startTime: new Date().toLocaleTimeString(), location: `${sector.name} — Geofence Verified`, elapsedSeconds: 0 }); setElapsedSeconds(0); }}
+                className="btn-outline"
+                style={{ width: '100%', padding: '14px' }}
+              >
+                ⚡ Quick Punch IN (No QR)
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button id="punch-out-btn" onClick={handlePunchOut} className="btn-red" style={{ width: '100%', padding: '16px', fontSize: '1rem' }}>
+                🛑 {t.checkOutBtn}
+              </button>
+              <button
+                onClick={() => setElapsedSeconds(prev => prev + 7200)}
+                className="btn-outline"
+                title="Demo: fast-forward 2h to show overtime"
+                style={{ width: '100%', padding: '12px', fontSize: '0.85rem' }}
+              >
+                ⏩ +2 Hours (Demo Overtime)
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* ② LIVE EARNINGS */}
         {activeShift && (
-          <div style={{
-            background: 'rgba(0, 0, 0, 0.3)',
-            borderRadius: 'var(--radius-md)',
-            padding: '20px 16px',
-            marginBottom: '28px',
-            border: '1px solid var(--border-subtle)'
-          }}>
-            {/* Net earned — hero number */}
-            <div style={{ marginBottom: '16px' }}>
-              <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '4px' }}>Estimated Net Earned This Shift</div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: '2.6rem', fontWeight: 800, color: '#38BDF8', lineHeight: 1 }}>
+          <div className="card" style={{ padding: '24px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '18px' }}>
+              <span className="section-num">2</span>
+              <span className="section-label">Live Earnings</span>
+            </div>
+            <div style={{ marginBottom: '14px' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '4px' }}>
+                Estimated Net This Shift
+              </div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '2.8rem', fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1 }}>
                 ₹{payCalculation.netTakeHome}
               </div>
             </div>
-            {/* Secondary stats row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div style={{ background: 'rgba(0, 212, 170, 0.07)', borderRadius: 'var(--radius-sm)', padding: '12px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{t.standardHours}</div>
-                <div style={{ fontSize: '1.35rem', fontWeight: 700, color: '#00D4AA' }}>{payCalculation.standardHours}h</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div style={{ background: 'var(--bg-page)', borderRadius: 'var(--radius-md)', padding: '12px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '3px' }}>{t.standardHours}</div>
+                <div style={{ fontWeight: 700, fontSize: '1.15rem', color: 'var(--accent-green)' }}>{payCalculation.standardHours}h</div>
               </div>
-              <div style={{ background: payCalculation.overtimeHours > 0 ? 'rgba(239,68,68,0.08)' : 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-sm)', padding: '12px' }}>
-                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>{t.overtimeHours}</div>
-                <div style={{ fontSize: '1.35rem', fontWeight: 700, color: payCalculation.overtimeHours > 0 ? '#F87171' : 'var(--text-secondary)' }}>{payCalculation.overtimeHours}h</div>
+              <div style={{ background: payCalculation.overtimeHours > 0 ? '#FEF2F2' : 'var(--bg-page)', borderRadius: 'var(--radius-md)', padding: '12px' }}>
+                <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '3px' }}>{t.overtimeHours}</div>
+                <div style={{ fontWeight: 700, fontSize: '1.15rem', color: payCalculation.overtimeHours > 0 ? 'var(--accent-red)' : 'var(--text-muted)' }}>{payCalculation.overtimeHours}h</div>
               </div>
             </div>
-          </div>
-        )}
-
-        {/* Hero Punch Action Button — full width, unmissable */}
-        {!activeShift ? (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <button
-              id="punch-in-btn"
-              onClick={handleScanQr}
-              className="btn-primary pulse-target"
-              style={{ width: '100%', padding: '18px', fontSize: '1.1rem', borderRadius: 'var(--radius-md)' }}
-            >
-              <span>📷</span> {t.simulatedQr}
-            </button>
-            <button
-              onClick={() => {
-                setActiveShift({
-                  startTime: new Date().toLocaleTimeString(),
-                  location: `${sector.name} — Geofence Verified`,
-                  elapsedSeconds: 0
-                });
-                setElapsedSeconds(0);
-              }}
-              className="btn-secondary"
-              style={{ width: '100%', padding: '14px', fontSize: '0.95rem' }}
-            >
-              <span>⚡</span> Quick Punch IN (No QR)
-            </button>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <button
-              id="punch-out-btn"
-              onClick={handlePunchOut}
-              className="btn-danger"
-              style={{ width: '100%', padding: '18px', fontSize: '1.1rem', borderRadius: 'var(--radius-md)' }}
-            >
-              <span>🛑</span> {t.checkOutBtn}
-            </button>
-            <button
-              onClick={() => setElapsedSeconds(prev => prev + 3600 * 2)}
-              className="btn-secondary"
-              title="Demo helper: advance 2 hours to showcase overtime"
-              style={{ width: '100%', fontSize: '0.85rem', padding: '11px' }}
-            >
-              ⏩ +2 Hours (Demo Overtime)
-            </button>
           </div>
         )}
       </div>
 
-      {/* Simulated QR Code Scanning Modal */}
-      {isQrModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0, 0, 0, 0.85)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 100,
-          padding: '20px'
-        }}>
-          <div className="glass-panel" style={{
-            maxWidth: '380px',
-            width: '100%',
-            padding: '28px',
-            textAlign: 'center',
-            border: '1px solid rgba(0, 212, 170, 0.4)'
-          }}>
-            <div style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px' }}>
-              {t.simulatedQr}
-            </div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginBottom: '20px' }}>
-              Point camera at site entrance barcode or verify GPS
-            </div>
-
-            {/* Scanning Target Box */}
-            <div style={{
-              width: '200px',
-              height: '200px',
-              margin: '0 auto 20px',
-              border: '2px dashed #00D4AA',
-              borderRadius: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              position: 'relative',
-              background: 'rgba(0, 212, 170, 0.05)'
-            }}>
-              <div style={{ fontSize: '64px' }}>📱</div>
-              {qrScanning && (
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  height: '3px',
-                  background: '#00D4AA',
-                  boxShadow: '0 0 10px #00D4AA',
-                  animation: 'pulseGlow 1.2s infinite'
-                }} />
-              )}
-            </div>
-
-            {qrScanning ? (
-              <div style={{ color: '#00D4AA', fontWeight: 600, fontSize: '0.9rem' }}>
-                🔄 Locking GPS Geofence & Scanning QR...
-              </div>
-            ) : (
-              <div style={{ color: '#38BDF8', fontWeight: 700, fontSize: '0.95rem' }}>
-                ✅ {qrSuccessMessage}
-              </div>
-            )}
-
-            <button
-              onClick={() => setIsQrModalOpen(false)}
-              className="btn-secondary"
-              style={{ marginTop: '20px', width: '100%' }}
-            >
-              Cancel
-            </button>
+      {/* RIGHT — Shift History */}
+      <div className="card" style={{ padding: '28px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="section-num">{activeShift ? '3' : '2'}</span>
+            <span className="section-label">{t.shiftHistory}</span>
           </div>
-        </div>
-      )}
-
-      {/* Recent Shift Logs Table */}
-      <div className="glass-panel" style={{ padding: '20px' }}>
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '16px'
-        }}>
-          <h3 style={{ fontSize: '1.1rem', fontWeight: 700 }}>{t.shiftHistory}</h3>
-          <span className="pill-badge pill-teal">{t.wageProofBadge}</span>
+          <span className="badge badge-green">✓ {t.wageProofBadge}</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {worker.recentShifts.map((shift, idx) => (
             <div key={idx} style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '12px 16px',
-              background: 'rgba(255, 255, 255, 0.03)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '14px 16px',
+              background: 'var(--bg-page)',
               borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-subtle)',
-              fontSize: '0.9rem'
+              border: '1.5px solid var(--border)',
             }}>
               <div>
-                <div style={{ fontWeight: 600 }}>{shift.date}</div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                  Total Duration: {shift.hours} hours {shift.hours > 8 ? `(+${(shift.hours - 8).toFixed(1)}h OT)` : ''}
+                <div style={{ fontWeight: 600, fontSize: '0.92rem' }}>{shift.date}</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                  {shift.hours}h total {shift.hours > 8 ? `· +${(shift.hours - 8).toFixed(1)}h OT` : ''}
                 </div>
               </div>
-
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontWeight: 700, color: '#00D4AA' }}>
-                  ₹{shift.net}
-                </div>
-                <span className="pill-badge pill-teal" style={{ fontSize: '0.65rem' }}>
-                  {shift.status}
-                </span>
+                <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.05rem' }}>₹{shift.net}</div>
+                <span className="badge badge-green" style={{ fontSize: '0.62rem', marginTop: '4px' }}>{shift.status}</span>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Rate info */}
+        <div style={{
+          marginTop: '16px', padding: '14px',
+          background: 'var(--bg-page)', borderRadius: 'var(--radius-md)',
+          border: '1.5px solid var(--border)',
+          fontSize: '0.82rem', color: 'var(--text-secondary)',
+        }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <span>Standard Rate</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>₹{worker.hourlyRate}/hr</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+            <span>Overtime Rate (1.5×)</span>
+            <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>₹{(worker.hourlyRate * 1.5).toFixed(0)}/hr</span>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>Hazard Allowance</span>
+            <span style={{ fontWeight: 700, color: 'var(--accent-amber)' }}>₹{worker.hazardRate}/hr</span>
+          </div>
+        </div>
       </div>
 
+      {/* QR Modal */}
+      {isQrModalOpen && (
+        <div style={{
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100, padding: '20px',
+        }}>
+          <div className="card" style={{ maxWidth: '360px', width: '100%', padding: '32px', textAlign: 'center' }}>
+            <div style={{ fontWeight: 700, fontSize: '1.1rem', marginBottom: '6px' }}>Scan Worksite QR Code</div>
+            <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+              Point camera at site entrance barcode or verify GPS
+            </div>
+            <div style={{
+              width: '180px', height: '180px', margin: '0 auto 24px',
+              border: '2px dashed var(--border-dark)',
+              borderRadius: 'var(--radius-lg)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+              background: 'var(--bg-page)', position: 'relative', overflow: 'hidden',
+            }}>
+              <span style={{ fontSize: '60px' }}>📱</span>
+              {qrScanning && (
+                <div style={{
+                  position: 'absolute', top: 0, left: 0, right: 0, height: '2px',
+                  background: 'var(--accent-black)', animation: 'pulseDot 1.2s infinite',
+                }} />
+              )}
+            </div>
+            {qrScanning
+              ? <div style={{ fontWeight: 600, color: 'var(--text-secondary)', fontSize: '0.9rem' }}>🔄 Locking GPS geofence...</div>
+              : <div style={{ fontWeight: 700, color: 'var(--accent-green)', fontSize: '0.9rem' }}>✅ {qrSuccessMessage}</div>
+            }
+            <button onClick={() => setIsQrModalOpen(false)} className="btn-outline" style={{ marginTop: '20px', width: '100%' }}>Cancel</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

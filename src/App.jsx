@@ -6,9 +6,8 @@ import { translations } from './i18n/translations';
 
 export default function App() {
   const [currentLang, setLang] = useState('en');
-  const [activeRole, setActiveRole] = useState('worker'); // 'worker' | 'admin'
-  const [activeSector, setActiveSector] = useState('construction'); // 'construction' | 'hospital'
-  const [isMobileFrame, setIsMobileFrame] = useState(false);
+  const [activeRole, setActiveRole] = useState('worker');
+  const [activeSector, setActiveSector] = useState('construction');
 
   const t = translations[currentLang] || translations.en;
 
@@ -260,7 +259,6 @@ export default function App() {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       
-      {/* Universal Header with Sector, Language, Role Switches */}
       <Header
         currentLang={currentLang}
         setLang={setLang}
@@ -268,12 +266,10 @@ export default function App() {
         setActiveRole={setActiveRole}
         activeSector={activeSector}
         setActiveSector={setActiveSector}
-        isMobileFrame={isMobileFrame}
-        setIsMobileFrame={setIsMobileFrame}
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: '32px 20px' }}>
+      <main style={{ flex: 1, padding: '32px 24px' }}>
         {activeRole === 'worker' ? (
           <WorkerPortal
             worker={currentWorker}
@@ -287,7 +283,6 @@ export default function App() {
             onSubmitFeedback={handleSubmitFeedback}
             onAddSkill={handleAddSkill}
             onShiftCompleted={handleShiftCompleted}
-            isMobileFrame={isMobileFrame}
           />
         ) : (
           <AdminDashboard
@@ -304,8 +299,8 @@ export default function App() {
 
       {/* Global Hackathon Footer */}
       <footer style={{
-        borderTop: '1px solid var(--border-subtle)',
-        background: 'rgba(8, 12, 22, 0.95)',
+        borderTop: '1.5px solid var(--border)',
+        background: '#FFFFFF',
         padding: '16px 24px',
         fontSize: '0.82rem',
         color: 'var(--text-secondary)'
@@ -322,7 +317,7 @@ export default function App() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>⚡ Built for <strong>Prompt Wars 2026</strong> × SRM ACM Student Chapter</span>
             <span>•</span>
-            <span style={{ color: '#00D4AA' }}>UN SDG 8: Decent Work & Economic Growth</span>
+            <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>UN SDG 8: Decent Work & Economic Growth</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
@@ -330,7 +325,7 @@ export default function App() {
             <span>•</span>
             <span>Cross-Industry: Construction & Hospital</span>
             <span>•</span>
-            <span style={{ color: '#38BDF8' }}>Google Cloud Run Ready ☁️</span>
+            <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>Google Cloud Run Ready ☁️</span>
           </div>
         </div>
       </footer>
