@@ -3,10 +3,10 @@ import { evaluateFatigueRisk, calculateAttritionRisk } from '../../utils/fairshi
 
 export default function AdminDashboard({
   workers,
-  sectors,
+  _sectors,
   hazards,
   feedbacks,
-  activeSector,
+  _activeSector,
   t,
   onResolveHazard
 }) {
@@ -547,6 +547,70 @@ export default function AdminDashboard({
               })}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* Section 6: Anonymous Worker Voice & Whistleblower Feedback */}
+      <div className="card" style={{ padding: '24px 28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="section-num">6</span>
+              <span className="section-label">RETALIATION-PROOF WHISTLEBLOWER INTELLIGENCE</span>
+            </div>
+            <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginTop: '4px' }}>
+              Worker Sentiment & Anonymous Reports
+            </h2>
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+              Aggregated worker feedback secured by SHA-256 cryptographic anonymity proofs
+            </p>
+          </div>
+          <span className="badge badge-black">{filteredFeedbacks.length} Verified Submissions</span>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
+          {filteredFeedbacks.map(f => (
+            <div key={f.id} style={{
+              background: 'var(--bg-input)',
+              border: '1.5px solid var(--border)',
+              borderRadius: 'var(--radius-md)',
+              padding: '18px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>
+                  {f.department || 'Frontline Shift Staff'}
+                </span>
+                <span className="badge badge-green" style={{ fontSize: '0.68rem' }}>
+                  {f.timestamp}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', gap: '14px', fontSize: '0.78rem', color: 'var(--text-secondary)' }}>
+                <span>Supervisor: <strong>{f.supervisorScore}/5</strong></span>
+                <span>Workload: <strong>{f.workloadScore}/5</strong></span>
+                <span>Safety: <strong>{f.facilitiesScore}/5</strong></span>
+              </div>
+
+              <p style={{
+                fontSize: '0.86rem',
+                color: 'var(--text-primary)',
+                background: '#FFFFFF',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius-sm)',
+                padding: '10px 12px',
+                fontStyle: 'italic'
+              }}>
+                "{f.comment}"
+              </p>
+
+              <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+                🛡️ {f.anonymityProof}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
 

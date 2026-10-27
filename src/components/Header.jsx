@@ -97,14 +97,14 @@ export default function Header({
             className={`pill-toggle${activeRole === 'worker' ? ' active' : ''}`}
             style={{ padding: '6px 16px', fontSize: '0.82rem' }}
           >
-            👷 Worker
+            👷 {t.roleWorker || 'Worker'}
           </button>
           <button
             onClick={() => setActiveRole('admin')}
             className={`pill-toggle${activeRole === 'admin' ? ' active' : ''}`}
             style={{ padding: '6px 16px', fontSize: '0.82rem' }}
           >
-            📊 Employer
+            📊 {t.roleAdmin || 'Employer'}
           </button>
         </div>
 

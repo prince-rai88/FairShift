@@ -262,7 +262,7 @@ app.post('/api/shifts/check-in', (req, res) => {
 
 // API: Shift Check-Out & Wage Calculation
 app.post('/api/shifts/check-out', (req, res) => {
-  const { workerId, hoursWorked, hourlyRate, hazardRate } = req.body;
+  const { _workerId, hoursWorked, hourlyRate, hazardRate } = req.body;
   const calculation = calculateShiftPay(hoursWorked || 8.5, hourlyRate || 130, hazardRate || 35);
   res.json({
     success: true,
