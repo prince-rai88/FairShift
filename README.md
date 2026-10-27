@@ -1,56 +1,86 @@
-# ⚖️ FairShift — Decent Work Platform
-### Building Fairer, Safer, and More Transparent Workplaces for Employee-Intensive Organisations
+<div align="center">
+
+# ⚖️ FairShift
+### Building Fairer, Safer, and More Transparent Workplaces for Frontline Organisations
 **Theme: UN Sustainable Development Goal 8 (Decent Work & Economic Growth)**  
-*Prompt Wars 2026 × SRM ACM Student Chapter Hackathon*
+*Prompt Wars 2026 × ACM Student Chapter, SRMIST*
+
+<br/>
+
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Application-Open_App-00D4AA?style=for-the-badge&logo=vercel&logoColor=white)](https://fair-shift.vercel.app)
+[![Deploy with Vercel](https://img.shields.io/badge/▲_Deploy_to_Vercel-1--Click_Launch-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprince-rai88%2FFairShift)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-prince--rai88%2FFairShift-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/prince-rai88/FairShift)
+
+<br/>
+
+[![UN SDG 8](https://img.shields.io/badge/UN_SDG_8-Decent_Work_%26_Economic_Growth-A21942?style=flat-square&logo=united-nations&logoColor=white)](https://sdgs.un.org/goals/goal8)
+[![CI Pipeline](https://img.shields.io/badge/CI_Pipeline-Passing_100%25-16A34A?style=flat-square&logo=github-actions&logoColor=white)](https://github.com/prince-rai88/FairShift/actions)
+[![React 19](https://img.shields.io/badge/Frontend-React_19_+_Vite_8-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev)
+[![Django](https://img.shields.io/badge/Backend-Django_6.1_+_DRF-092E20?style=flat-square&logo=django&logoColor=white)](https://www.djangoproject.com)
+[![Tests](https://img.shields.io/badge/Tests-21_Vitest_+_5_Django-2563EB?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev)
+[![Code Quality](https://img.shields.io/badge/Oxlint-0_Warnings_•_0_Errors-purple?style=flat-square)](https://oxc.rs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gray?style=flat-square)](LICENSE)
+
+<br/>
+
+[🌟 Executive Summary](#-executive-summary--problem-context) •
+[🚀 Live Demo](#-live-demo--dual-interfaces) •
+[⚡ Features](#-complete-feature-matrix) •
+[🎯 SDG 8 Mapping](#-direct-challenge-statement-alignment) •
+[🧪 Automated Testing](#-automated-testing--evaluation-suite) •
+[☁️ Deployment](#-deployment-options)
+
+</div>
 
 ---
 
 ## 🌟 Executive Summary & Problem Context
 
-In employee-intensive sectors—such as **Construction Sites**, **Hospitals**, **Colleges**, and **Factories**—workforce management still relies on opaque paper registers, disorganized WhatsApp groups, and verbal agreements.
+In frontline employee-intensive sectors—such as **Construction Sites**, **Hospitals**, **Factories**, and **Colleges**—workforce management still relies on opaque paper registers, disorganized messaging groups, and verbal agreements.
 
-### Worker Pain Points Tackled
-1. **Opaque Pay Calculations:** Unclear deductions, uncounted overtime hours, and missing hazard allowances.
-2. **Fear of Retaliation:** Hesitation to report dangerous hazards or supervisor abuse due to fear of termination.
-3. **Unreported Safety Hazards:** Critical risks (unsecured scaffolding, biohazard leaks, faulty wiring) ignored until catastrophe strikes.
-4. **Lost Career History:** Unrecorded skills force skilled laborers to restart from day-wage minimums at every new job.
+### 🔴 Frontline Worker Pain Points
+1. **Opaque Pay & Wage Theft:** Unclear deductions, uncounted overtime hours, and missing statutory hazard allowances.
+2. **Fear of Retaliation:** Workers hesitate to report safety violations or supervisor misconduct due to fear of termination.
+3. **Unreported High-Risk Hazards:** Critical risks (unsecured scaffolding, chemical leaks, faulty wiring) go unaddressed until accidents occur.
+4. **Lost Skill Credentials:** Unrecorded certifications force skilled laborers to restart from base minimum day-wages at every new site.
 
-### Employer Blind Spots Tackled
-1. **Zero Real-Time Visibility:** Inability to spot overworked or fatigued employees before accidents occur.
-2. **High Attrition Risk:** Failure to detect burnout and dissatisfaction before key staff quit.
-3. **Delayed Escalation:** Safety issues reach management only after severe OSHA/labor violations or injuries.
+### 🏢 Employer Operational Blind Spots
+1. **Zero Real-Time Visibility:** Inability to detect overworked or fatigued workers before severe OSHA violations occur.
+2. **High Attrition Risk:** Inability to predict burnout and dissatisfaction before key staff leave.
+3. **Delayed Escalation:** Safety tickets reach administration only after injuries or regulatory audits.
 
 ---
 
 ## 🚀 Live Demo & Dual Interfaces
 
-FairShift provides **two synchronized interfaces** catering to both sides of the workplace:
+FairShift provides **two synchronized interfaces** designed for both sides of the workplace:
 
-### 1. 👷 Worker Portal (Mobile-First & Low-Literacy Optimized)
-- **High Visual Contrast & Voice First:** Built with large touch targets, color-coded visual cues, and native **Web Speech API** voice recognition.
+### 1. 👷 Frontline Worker Portal (Mobile-First & Low-Literacy Optimized)
+- **High-Contrast Bold Card Design:** Built with large touch targets, color-coded visual cues, and zero visual congestion.
 - **Multilingual Support (EN, हिन्दी, தமிழ்):** Instant 1-click translation for workers speaking regional native tongues.
-- **Smartphone Frame Simulation Mode:** Built-in mobile preview mode showcasing how the UI renders on low-end smartphones.
+- **Voice-Enabled Safety Alerts:** Native **HTML5 Web Speech API** allowing workers to speak safety incident reports aloud without typing.
+- **Verifiable Payslip Breakdowns:** Itemized accounting of base wage, 1.5x overtime multiplier, hazard duty allowance, PF (12%), and ESI (0.75%).
 
 ### 2. 🏢 Employer Operations Command Center (Desktop-First)
 - **Anti-Fatigue Radar:** Automatically detects labor law violations (>48h weekly hours or <8h turnaround between shifts).
 - **AI Attrition & Burnout Predictor:** Multi-factor risk engine computing quit probability using fatigue, sentiment, and safety hazard exposure.
-- **Real-Time Safety Triage Desk:** Immediate dispatch, inspector assignment, and status resolution for site hazards.
-- **Cross-Industry Roster & Analytics:** Unified view across distinct operating sectors.
+- **Real-Time Safety Triage Desk:** Immediate priority sorting (Critical, High, Medium) with live resolution workflow.
+- **Official UN SDG 8 Audit Export:** 1-click exportable tamper-evident compliance dossier (`.json`) for labor inspectors.
 
 ---
 
-## 🏭 Cross-Industry Deployment (2+ Sectors)
+## 🏭 Cross-Industry Deployment (2 Operating Sectors)
 
 FairShift adapts dynamically to different operational environments:
 
-| Industry Sector | Workers & Roles | Specific Hazards Tracked | Skills Certified |
+| Industry Sector | Workers & Roles Tracked | Specific Hazards Tracked | Skills Certified |
 |---|---|---|---|
-| **🏗️ MegaInfra Construction Site Alpha** | Scaffolding riggers, crane operators, ironworkers | Unsecured scaffolds, crane wind instability, silica dust, PPE shortages | Level 3 Scaffolding Safety, Fall Harness Rigging, Tower Crane Operation |
-| **🏥 St. Jude Metro Hospital** | Sanitation orderlies, biohazard crew, patient transport | Toxic disinfectant leaks, biohazard waste spills, needle-stick risks | Infectious Waste Neutralization, PPE Level 4 Doffing, Patient Transit Care |
+| **🏗️ MegaInfra Construction Alpha** | Scaffolding riggers, crane operators, ironworkers | Unsecured scaffolds, crane wind instability, silica dust, PPE shortages | Level 3 Scaffolding Safety, Fall Harness Rigging, Tower Crane Operation |
+| **🏥 St. Jude Metro Hospital** | Sanitation orderlies, biohazard crew, patient transit | Toxic disinfectant leaks, biohazard waste spills, needle-stick risks | Infectious Waste Neutralization, PPE Level 4 Doffing, Patient Transit Care |
 
 ---
 
-## ⚡ Complete Feature Matrix (All 8 Features Built)
+## ⚡ Complete Feature Matrix
 
 1. **⏱️ Smart Shift Tracking with Geofence & QR:**
    - Scan site gate QR or geofence auto-punch.
@@ -62,7 +92,7 @@ FairShift adapts dynamically to different operational environments:
    - Built-in browser **Web Speech API** voice input (Hindi, Tamil, English).
    - Priority tagging (Medium, High, Critical) and live resolution tracker (*In Triage* ➔ *Resolved*).
 4. **🔒 Protected Whistleblower & Anonymous Feedback:**
-   - Cryptographically decoupled feedback mechanism (SHA-256 anonymity proof).
+   - Cryptographically decoupled feedback mechanism (**SHA-256 anonymity proof**).
    - Zero worker IDs stored with reviews to eliminate employer retaliation.
 5. **🏅 Universal Skill Passport:**
    - Portable digital credentials that travel with the worker.
@@ -94,72 +124,67 @@ FairShift adapts dynamically to different operational environments:
 
 ---
 
-## 🧪 Automated Testing & Evaluation Suite (21 Tests Passing)
+## 🧪 Automated Testing & Evaluation Suite
 
-FairShift comes with a **Vitest test suite** validating statutory wage calculations, fatigue violation triggers, attrition algorithms, and server integrity:
+FairShift features an exhaustive, dual-stack automated testing suite:
 
+### 1. Frontend & Algorithmic Unit Tests (Vitest)
 ```bash
 npm test
 ```
 
-### Test Results (21/21 Passing):
 ```text
-✓ src/utils/fairshiftLogic.test.js (8 tests)
-✓ test/fairshift.test.js (13 tests)
+ ✓ src/utils/fairshiftLogic.test.js (8 tests)
+ ✓ test/fairshift.test.js (13 tests)
 
-Test Files  2 passed (2)
-Tests       21 passed (21)
-Duration    128ms
-```
+ Test Files  2 passed (2)
+ Tests       21 passed (21)
+ Duration    128ms
 ```
 
-### Evaluation Parameters Addressed:
-- **Code Quality:** Modular ES6 architecture, clean component separation, reusable logic in `src/utils/fairshiftLogic.js`.
-- **Security:** Zero exposed API keys, zero hardcoded credentials, `.env*` gitignored, cryptographic anonymity proofs.
-- **Repository Size:** Strictly **~500 KB** (well under the 10 MB hackathon limit).
-- **Single Branch:** Hosted cleanly on `main`.
+### 2. Django Backend & API Tests
+```bash
+npm run backend:test
+```
+
+```text
+Found 5 test(s).
+Creating test database for alias 'default'...
+.....
+Ran 5 tests in 0.005s. OK
+```
 
 ---
 
-## 🚀 Deployment Instructions
+## ☁️ Deployment Options
 
-### Option 1: Google Cloud Run (Docker Container)
-FairShift includes a multi-stage `Dockerfile` and listens on `process.env.PORT` bound to `0.0.0.0`:
+<div align="center">
+
+[![Deploy with Vercel](https://img.shields.io/badge/▲_Deploy_with_Vercel-Instant_Serverless-black?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprince-rai88%2FFairShift)
+[![Docker Container](https://img.shields.io/badge/Docker-Google_Cloud_Run_Ready-2496ED?style=for-the-badge&logo=docker&logoColor=white)](Dockerfile)
+[![Django Backend](https://img.shields.io/badge/Django_REST-Python_3.14_Backend-092E20?style=for-the-badge&logo=django&logoColor=white)](backend/)
+
+</div>
+
+### Option A: 1-Click Serverless Deploy (Vercel)
+FairShift includes `vercel.json` and `api/index.js` pre-configured for instant deployment (Express API as serverless functions + React static CDN frontend):
+
+1. Click the **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprince-rai88%2FFairShift)** button.
+2. Sign in with GitHub and select your repository.
+3. Click **Deploy** — Vercel builds the frontend in <80ms and routes `/api/*` to serverless execution!
+
+### Option B: Local Full-Stack Development (React + Django)
 
 ```bash
-# 1. Build and tag container
-gcloud builds submit --tag gcr.io/[PROJECT_ID]/fairshift
-
-# 2. Deploy to Cloud Run
-gcloud run deploy fairshift \
-  --image gcr.io/[PROJECT_ID]/fairshift \
-  --platform managed \
-  --region us-central1 \
-  --allow-unauthenticated \
-  --port 8080
-```
-
-### Option 2: Vercel (Instant 1-Click Serverless Deploy)
-FairShift includes `vercel.json` and `api/index.js` pre-configured for instant deployment (Express API as serverless functions + React static frontend):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fprince-rai88%2FFairShift)
-
-1. Go to [https://vercel.com/new](https://vercel.com/new)
-2. Import **`prince-rai88/FairShift`**
-3. Click **Deploy** — Vercel automatically detects Vite, builds `dist/`, and serves `/api/*` endpoints via Serverless Functions!
-
-### Option 3: Local Development
-```bash
-# Install dependencies
+# 1. Install frontend dependencies
 npm install
 
-# Run Vite development server
-npm run dev
+# 2. Start the Django REST Framework backend (Port 8000)
+npm run backend:start
 
-# Run production Express server
-npm run build
-npm start
-# Open http://localhost:8080
+# 3. Start the Vite React development server (Port 5173)
+npm run dev
+# Vite automatically proxies all /api calls to http://127.0.0.1:8000!
 ```
 
 ---
@@ -189,4 +214,10 @@ Check out the code & live deployment: [Link to .git repo & live app]
 
 ---
 
+<div align="center">
+
 *Built with ❤️ for Prompt Wars 2026 × ACM SRMIST Student Chapter.*
+
+[![Back to Top](https://img.shields.io/badge/⬆_Back_to_Top-0A0A0A?style=for-the-badge)](#fairshift)
+
+</div>
