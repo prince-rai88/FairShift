@@ -197,29 +197,37 @@ export default function AdminDashboard({
         </div>
 
         {/* Metric 3: Fatigue Violations */}
-        <div className="card" style={{ padding: '20px 24px', borderLeft: '4px solid var(--accent-amber)' }}>
+        <div className="card" style={{
+          padding: '20px 24px',
+          borderLeft: '4px solid #F59E0B',
+          boxShadow: 'inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.38), inset 0 0 25px rgba(245, 158, 11, 0.12), 0 16px 40px -8px rgba(0, 0, 0, 0.75)',
+        }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="section-label" style={{ color: 'var(--accent-amber)' }}>{t.statFatigueAlerts}</span>
+            <span className="section-label" style={{ color: '#FBBF24' }}>{t.statFatigueAlerts}</span>
             <span style={{ fontSize: '18px' }}>⚠️</span>
           </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--accent-amber)' }}>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: '#FBBF24' }}>
             {fatigueViolations.length} Staff
           </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+          <div style={{ fontSize: '0.78rem', color: '#94A3B8', marginTop: '6px' }}>
             Mandatory recovery relief required
           </div>
         </div>
 
         {/* Metric 4: Safety Hazards */}
-        <div className="card" style={{ padding: '20px 24px', borderLeft: '4px solid var(--accent-red)' }}>
+        <div className="card" style={{
+          padding: '20px 24px',
+          borderLeft: '4px solid #EF4444',
+          boxShadow: 'inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.38), inset 0 0 25px rgba(239, 68, 68, 0.12), 0 16px 40px -8px rgba(0, 0, 0, 0.75)',
+        }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="section-label" style={{ color: 'var(--accent-red)' }}>{t.statSafetyIncidents}</span>
+            <span className="section-label" style={{ color: '#F87171' }}>{t.statSafetyIncidents}</span>
             <span style={{ fontSize: '18px' }}>🚨</span>
           </div>
-          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--accent-red)' }}>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: '#F87171' }}>
             {openHazardsCount} Open
           </div>
-          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+          <div style={{ fontSize: '0.78rem', color: '#94A3B8', marginTop: '6px' }}>
             Safety alert protocol active
           </div>
         </div>

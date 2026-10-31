@@ -67,28 +67,22 @@ export default function WorkerPortal({
         {/* Quick telemetry pills */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
           {/* Rate Badge */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-glass)',
-            borderRadius: 'var(--radius-lg)',
-            padding: '10px 16px',
+          <div className="glass-subpanel" style={{
+            padding: '12px 20px',
             textAlign: 'center',
           }}>
-            <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Base Rate</div>
-            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.1rem', color: '#38BDF8' }}>
+            <div style={{ fontSize: '0.68rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Base Rate</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.15rem', color: '#38BDF8' }}>
               ₹{worker.hourlyRate}/hr
             </div>
           </div>
 
           {/* Fatigue badge */}
-          <div style={{
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-glass)',
-            borderRadius: 'var(--radius-lg)',
-            padding: '10px 16px',
+          <div className="glass-subpanel" style={{
+            padding: '12px 20px',
             textAlign: 'center',
           }}>
-            <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
+            <div style={{ fontSize: '0.68rem', color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '6px' }}>
               {t.fatigueRisk}
             </div>
             <span className={`badge ${fatigueAnalysis.riskLevel === 'CRITICAL' ? 'badge-red' : fatigueAnalysis.riskLevel === 'MODERATE' ? 'badge-amber' : 'badge-green'}`}>

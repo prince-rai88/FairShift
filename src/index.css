@@ -120,56 +120,116 @@ button {
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── 3D Liquid Glass Card ── */
+/* ── 3D Liquid Glass Card with High-Depth Volumetric Borders ── */
 .card, .glass-panel {
   position: relative;
   background: var(--glass-card);
-  backdrop-filter: blur(24px) saturate(190%);
-  -webkit-backdrop-filter: blur(24px) saturate(190%);
-  border: 1px solid var(--border-glass);
-  border-top: 1.5px solid var(--border-highlight);
+  backdrop-filter: blur(28px) saturate(200%);
+  -webkit-backdrop-filter: blur(28px) saturate(200%);
+  
+  /* Volumetric 3-layer glass border */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.42);
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.65);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-liquid);
+  
+  /* Multi-layered Beveled Light & Occlusion Depth */
+  box-shadow: 
+    inset 0 1.5px 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 -2px 4px 0 rgba(0, 0, 0, 0.55),
+    inset 0 0 30px rgba(56, 189, 248, 0.03),
+    0 16px 40px -8px rgba(0, 0, 0, 0.75),
+    0 28px 65px -15px rgba(2, 6, 23, 0.88),
+    0 0 25px -4px rgba(6, 182, 212, 0.15);
+    
   overflow: hidden;
-  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              box-shadow 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), 
-              border-color 0.35s ease,
-              background 0.35s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.4s ease,
+              background 0.4s ease;
   transform-style: preserve-3d;
   will-change: transform, box-shadow;
 }
 
-/* Fluid Sheen Overlay */
+/* Fluid Sheen Overlay across upper card */
 .card::before, .glass-panel::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 45%;
-  background: var(--specular-sheen);
+  height: 50%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.04) 45%, transparent 100%);
   border-radius: inherit;
   pointer-events: none;
-  opacity: 0.85;
+  opacity: 0.9;
   transition: opacity 0.3s ease;
 }
 
-/* 3D Hover & Depth Reaction */
-.card:hover, .glass-panel:hover {
-  transform: translateY(-5px) scale(1.008);
-  box-shadow: var(--shadow-liquid-hover);
-  border-color: var(--border-glow);
-  border-top-color: rgba(255, 255, 255, 0.45);
-  background: var(--glass-card-hover);
+/* Prismatic top border refraction highlight */
+.card::after, .glass-panel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.7), rgba(56, 189, 248, 0.9), rgba(255, 255, 255, 0.7), transparent);
+  pointer-events: none;
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.75);
+  transition: all 0.4s ease;
 }
 
-/* Secondary Sub-panel inside cards */
+/* 3D Hover & Deep Border Light Reaction */
+.card:hover, .glass-panel:hover {
+  transform: translateY(-6px) scale(1.012);
+  background: var(--glass-card-hover);
+  border-color: rgba(56, 189, 248, 0.45);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  border-bottom-color: rgba(0, 0, 0, 0.8);
+  
+  box-shadow: 
+    inset 0 2px 2px 0 rgba(255, 255, 255, 0.75),
+    inset 0 0 0 1.5px rgba(56, 189, 248, 0.35),
+    inset 0 -2.5px 5px 0 rgba(0, 0, 0, 0.65),
+    inset 0 0 35px rgba(6, 182, 212, 0.14),
+    0 25px 65px -10px rgba(0, 0, 0, 0.9),
+    0 0 45px rgba(6, 182, 212, 0.38),
+    0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.card:hover::after, .glass-panel:hover::after {
+  left: 4%;
+  right: 4%;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 1), 0 0 35px rgba(6, 182, 212, 0.85);
+  background: linear-gradient(90deg, transparent, #FFFFFF, #38BDF8, #FFFFFF, transparent);
+}
+
+/* Secondary Sub-panel inside cards with beveled depth */
 .glass-subpanel {
-  background: rgba(8, 16, 38, 0.55);
-  backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 16, 38, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1.5px solid rgba(255, 255, 255, 0.28);
+  border-bottom: 1.5px solid rgba(0, 0, 0, 0.5);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25) inset;
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2),
+    inset 0 -1.5px 2px 0 rgba(0, 0, 0, 0.4),
+    0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: all 0.25s ease;
+}
+
+.glass-subpanel:hover {
+  border-color: rgba(56, 189, 248, 0.35);
+  border-top-color: rgba(255, 255, 255, 0.5);
+  box-shadow: 
+    inset 0 1.5px 2px 0 rgba(255, 255, 255, 0.35),
+    0 8px 25px rgba(0, 0, 0, 0.45),
+    0 0 18px rgba(6, 182, 212, 0.22);
+  transform: translateY(-2px);
 }
 
 /* ── Section Number Badge ── */

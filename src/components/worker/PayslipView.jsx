@@ -25,12 +25,9 @@ export default function PayslipView({ worker, sector, t }) {
         </div>
 
         {/* Worker info row */}
-        <div style={{
-          background: 'rgba(255, 255, 255, 0.03)',
-          borderRadius: 'var(--radius-md)',
+        <div className="glass-subpanel" style={{
           padding: '16px 18px',
           marginBottom: '20px',
-          border: '1px solid var(--border-glass)',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '6px' }}>
             <span style={{ color: '#94A3B8' }}>Worker</span>
@@ -49,12 +46,9 @@ export default function PayslipView({ worker, sector, t }) {
         {/* Line items */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
           {rows.map((row, i) => (
-            <div key={i} style={{
+            <div key={i} className="glass-subpanel" style={{
               display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              padding: '14px 16px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-glass)',
+              padding: '14px 18px',
             }}>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '0.92rem', color: '#FFFFFF' }}>{row.label}</div>
@@ -146,12 +140,9 @@ export default function PayslipView({ worker, sector, t }) {
               { icon: '🏦', label: 'Disbursement', value: 'Direct Bank Transfer (Aadhaar DBT)', mono: false },
               { icon: '⚖️', label: 'Compliance', value: 'Min. Wages Act · Factories Act', mono: false },
             ].map((item, i) => (
-              <div key={i} style={{
+              <div key={i} className="glass-subpanel" style={{
                 display: 'flex', gap: '14px', alignItems: 'flex-start',
-                padding: '14px',
-                background: 'rgba(255, 255, 255, 0.03)',
-                borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--border-glass)',
+                padding: '14px 18px',
               }}>
                 <span style={{ fontSize: '1.3rem' }}>{item.icon}</span>
                 <div>

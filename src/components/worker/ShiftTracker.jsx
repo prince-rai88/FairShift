@@ -172,23 +172,17 @@ export default function ShiftTracker({ worker, sector, t, activeShift, setActive
               </div>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.03)',
-                border: '1px solid var(--border-glass)',
-                borderRadius: 'var(--radius-md)',
-                padding: '14px',
-              }}>
+              <div className="glass-subpanel" style={{ padding: '16px' }}>
                 <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>{t.standardHours}</div>
-                <div style={{ fontWeight: 700, fontSize: '1.2rem', color: '#38BDF8' }}>{payCalculation.standardHours}h</div>
+                <div style={{ fontWeight: 700, fontSize: '1.25rem', color: '#38BDF8' }}>{payCalculation.standardHours}h</div>
               </div>
-              <div style={{
-                background: payCalculation.overtimeHours > 0 ? 'rgba(239, 68, 68, 0.12)' : 'rgba(255, 255, 255, 0.03)',
-                border: `1px solid ${payCalculation.overtimeHours > 0 ? 'rgba(239, 68, 68, 0.3)' : 'var(--border-glass)'}`,
-                borderRadius: 'var(--radius-md)',
-                padding: '14px',
+              <div className="glass-subpanel" style={{
+                padding: '16px',
+                background: payCalculation.overtimeHours > 0 ? 'rgba(239, 68, 68, 0.12)' : undefined,
+                borderColor: payCalculation.overtimeHours > 0 ? 'rgba(239, 68, 68, 0.35)' : undefined,
               }}>
                 <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginBottom: '4px' }}>{t.overtimeHours}</div>
-                <div style={{ fontWeight: 700, fontSize: '1.2rem', color: payCalculation.overtimeHours > 0 ? '#F87171' : 'var(--text-muted)' }}>{payCalculation.overtimeHours}h</div>
+                <div style={{ fontWeight: 700, fontSize: '1.25rem', color: payCalculation.overtimeHours > 0 ? '#F87171' : 'var(--text-muted)' }}>{payCalculation.overtimeHours}h</div>
               </div>
             </div>
           </div>
@@ -207,13 +201,9 @@ export default function ShiftTracker({ worker, sector, t, activeShift, setActive
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {worker.recentShifts.map((shift, idx) => (
-            <div key={idx} style={{
+            <div key={idx} className="glass-subpanel" style={{
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '14px 18px',
-              background: 'rgba(255, 255, 255, 0.03)',
-              borderRadius: 'var(--radius-md)',
-              border: '1px solid var(--border-glass)',
-              transition: 'all 0.25s ease',
             }}>
               <div>
                 <div style={{ fontWeight: 600, fontSize: '0.94rem', color: '#FFFFFF' }}>{shift.date}</div>
@@ -230,11 +220,8 @@ export default function ShiftTracker({ worker, sector, t, activeShift, setActive
         </div>
 
         {/* Rate info */}
-        <div style={{
-          marginTop: '20px', padding: '16px',
-          background: 'rgba(255, 255, 255, 0.02)',
-          borderRadius: 'var(--radius-md)',
-          border: '1px solid var(--border-glass)',
+        <div className="glass-subpanel" style={{
+          marginTop: '20px', padding: '18px',
           fontSize: '0.84rem', color: '#94A3B8',
         }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
