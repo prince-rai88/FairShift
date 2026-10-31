@@ -2,19 +2,22 @@ import React, { useState } from 'react';
 
 function RatingSlider({ label, value, onChange, lowLabel, highLabel }) {
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ marginBottom: '22px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-        <label style={{ fontSize: '0.88rem', fontWeight: 600 }}>{label}</label>
+        <label style={{ fontSize: '0.9rem', fontWeight: 600, color: '#FFFFFF' }}>{label}</label>
         <span style={{
           fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '0.95rem',
-          background: 'var(--bg-page)', border: '1.5px solid var(--border)',
-          borderRadius: '8px', padding: '3px 10px',
+          background: 'rgba(255, 255, 255, 0.05)',
+          border: '1px solid var(--border-glass)',
+          borderRadius: '8px', padding: '4px 12px',
+          color: '#38BDF8',
+          boxShadow: '0 0 12px rgba(56, 189, 248, 0.2)',
         }}>
           {value} / 5
         </span>
       </div>
       <input type="range" min="1" max="5" step="1" value={value} onChange={e => onChange(Number(e.target.value))} />
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.74rem', color: '#94A3B8', marginTop: '6px' }}>
         <span>{lowLabel}</span>
         <span>{highLabel}</span>
       </div>
@@ -49,35 +52,39 @@ export default function AnonymousFeedback({ sector, t, onSubmitFeedback }) {
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', alignItems: 'start' }}>
 
       {/* LEFT — Form */}
-      <div className="card" style={{ padding: '28px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+      <div className="card" style={{ padding: '30px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
           <span className="section-num">1</span>
           <span className="section-label">Anonymous Feedback</span>
         </div>
-        <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginBottom: '24px' }}>
+        <p style={{ fontSize: '0.84rem', color: '#94A3B8', marginBottom: '24px' }}>
           {t.feedbackSubtitle} Your identity is never captured.
         </p>
 
         {submitted ? (
           <div style={{
-            background: '#F0FDF4', border: '1.5px solid #86EFAC', borderRadius: 'var(--radius-lg)',
-            padding: '28px', textAlign: 'center',
+            background: 'rgba(16, 185, 129, 0.12)',
+            border: '1.5px solid rgba(16, 185, 129, 0.4)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '32px', textAlign: 'center',
           }}>
-            <div style={{ fontSize: '36px', marginBottom: '12px' }}>🛡️</div>
-            <h3 style={{ fontWeight: 700, color: 'var(--accent-green)', marginBottom: '8px' }}>{t.feedbackSuccess}</h3>
-            <p style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
+            <div style={{ fontSize: '42px', marginBottom: '14px' }}>🛡️</div>
+            <h3 style={{ fontWeight: 800, color: '#34D399', marginBottom: '8px' }}>{t.feedbackSuccess}</h3>
+            <p style={{ fontSize: '0.86rem', color: '#CBD5E1', marginBottom: '18px' }}>
               Combined into anonymized statistics. No name or ID recorded.
             </p>
             <div style={{
-              display: 'inline-block', padding: '6px 14px',
-              background: '#0A0A0A', borderRadius: 'var(--radius-md)',
-              fontSize: '0.75rem', color: '#fff', fontFamily: 'var(--font-mono)',
-              marginBottom: '16px',
+              display: 'inline-block', padding: '8px 16px',
+              background: 'rgba(0, 0, 0, 0.5)',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              fontSize: '0.8rem', color: '#38BDF8', fontFamily: 'var(--font-mono)',
+              marginBottom: '20px',
             }}>
               {proofHash}
             </div>
             <div>
-              <button onClick={() => setSubmitted(false)} className="btn-outline" style={{ fontSize: '0.85rem' }}>
+              <button onClick={() => setSubmitted(false)} className="btn-outline" style={{ fontSize: '0.88rem' }}>
                 Submit Another Review
               </button>
             </div>
@@ -97,8 +104,8 @@ export default function AnonymousFeedback({ sector, t, onSubmitFeedback }) {
               lowLabel="Poor Hygiene" highLabel="Clean Restrooms & Water"
             />
 
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)' }}>
+            <div style={{ marginBottom: '22px' }}>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.05em', color: '#94A3B8' }}>
                 {t.writtenFeedback}
               </label>
               <textarea
@@ -108,7 +115,7 @@ export default function AnonymousFeedback({ sector, t, onSubmitFeedback }) {
               />
             </div>
 
-            <button type="submit" className="btn-black" style={{ width: '100%', padding: '15px', fontSize: '1rem' }}>
+            <button type="submit" className="btn-black" style={{ width: '100%', padding: '16px', fontSize: '1rem' }}>
               🔒 {t.submitFeedback}
             </button>
           </form>
@@ -116,14 +123,14 @@ export default function AnonymousFeedback({ sector, t, onSubmitFeedback }) {
       </div>
 
       {/* RIGHT — How it works */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div className="card" style={{ padding: '28px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <div className="card" style={{ padding: '30px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '22px' }}>
             <span className="section-num">2</span>
             <span className="section-label">Privacy Guarantee</span>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {[
               { icon: '🔒', title: 'Cryptographically Decoupled', desc: 'Your response is anonymized before storage — no link to your ID.' },
               { icon: '📊', title: 'Aggregate Only', desc: 'Managers see department averages, never individual responses.' },
@@ -131,14 +138,17 @@ export default function AnonymousFeedback({ sector, t, onSubmitFeedback }) {
               { icon: '🌐', title: 'Multilingual', desc: 'Submit in English, Hindi, or Tamil — all equal weight.' },
             ].map((item, i) => (
               <div key={i} style={{
-                display: 'flex', gap: '12px',
-                padding: '12px', background: 'var(--bg-page)',
-                borderRadius: 'var(--radius-md)', border: '1.5px solid var(--border)',
+                display: 'flex', gap: '14px',
+                padding: '14px',
+                background: 'rgba(255, 255, 255, 0.03)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-glass)',
+                transition: 'all 0.25s ease',
               }}>
-                <span style={{ fontSize: '1.2rem', flexShrink: 0 }}>{item.icon}</span>
+                <span style={{ fontSize: '1.3rem', flexShrink: 0 }}>{item.icon}</span>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.88rem', marginBottom: '2px' }}>{item.title}</div>
-                  <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>{item.desc}</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#FFFFFF', marginBottom: '2px' }}>{item.title}</div>
+                  <div style={{ fontSize: '0.8rem', color: '#94A3B8' }}>{item.desc}</div>
                 </div>
               </div>
             ))}

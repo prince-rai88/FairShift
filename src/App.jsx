@@ -118,14 +118,17 @@ export default function App() {
 
       {/* Global Hackathon Footer */}
       <footer style={{
-        borderTop: '1.5px solid var(--border)',
-        background: '#FFFFFF',
-        padding: '16px 24px',
+        borderTop: '1px solid var(--border-glass)',
+        background: 'rgba(6, 11, 24, 0.85)',
+        backdropFilter: 'blur(20px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        padding: '18px 28px',
         fontSize: '0.82rem',
-        color: 'var(--text-secondary)'
+        color: 'var(--text-secondary)',
+        boxShadow: '0 -4px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
       }}>
         <div style={{
-          maxWidth: '1440px',
+          maxWidth: '1360px',
           margin: '0 auto',
           display: 'flex',
           justifyContent: 'space-between',
@@ -135,16 +138,16 @@ export default function App() {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>⚡ Built for <strong>Prompt Wars 2026</strong> × SRM ACM Student Chapter</span>
-            <span>•</span>
-            <span style={{ color: 'var(--accent-green)', fontWeight: 600 }}>UN SDG 8: Decent Work & Economic Growth</span>
+            <span style={{ opacity: 0.4 }}>•</span>
+            <span style={{ color: '#34D399', fontWeight: 600 }}>UN SDG 8: Decent Work & Economic Growth</span>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <span>Dual Interfaces: Worker & Employer</span>
-            <span>•</span>
+            <span style={{ opacity: 0.4 }}>•</span>
             <span>Cross-Industry: Construction & Hospital</span>
-            <span>•</span>
-            <span style={{ color: 'var(--accent-blue)', fontWeight: 600 }}>Google Cloud Run Ready ☁️</span>
+            <span style={{ opacity: 0.4 }}>•</span>
+            <span style={{ color: '#38BDF8', fontWeight: 600 }}>Google Cloud Run & Django Ready ☁️</span>
           </div>
         </div>
       </footer>

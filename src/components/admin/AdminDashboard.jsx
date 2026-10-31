@@ -48,8 +48,8 @@ export default function AdminDashboard({
   const handleResolve = (hazardId) => {
     if (onResolveHazard) {
       onResolveHazard(hazardId);
-      setResolvedNotice(`Hazard ticket ${hazardId} acknowledged and marked as Resolved.`);
-      setTimeout(() => setResolvedNotice(null), 3500);
+      setResolvedNotice(`Hazard ${hazardId} acknowledged and marked Resolved.`);
+      setTimeout(() => setResolvedNotice(null), 3000);
     }
   };
 
@@ -90,84 +90,44 @@ export default function AdminDashboard({
     <div style={{ maxWidth: '1440px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
       
       {/* Top Banner & Sector Filter */}
-      <div className="card" style={{ padding: '26px 30px', position: 'relative', overflow: 'hidden' }}>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '320px',
-          height: '100%',
-          background: 'radial-gradient(circle at top right, rgba(16, 185, 129, 0.06), transparent 70%)',
-          pointerEvents: 'none'
-        }} />
-
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', position: 'relative' }}>
+      <div className="card" style={{ padding: '24px 28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px', flexWrap: 'wrap' }}>
-              <span className="badge badge-black" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                <span className="pulse-dot" style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
-                EMPLOYER COMMAND CENTER
-              </span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+              <span className="badge badge-black">EMPLOYER COMMAND CENTER</span>
               <span className="badge badge-green">UN SDG 8.5 & 8.8 VERIFIED</span>
-              <span className="badge badge-gray" style={{ fontFamily: 'var(--font-mono)' }}>LIVE AUDIT v2.4</span>
             </div>
-            <h1 style={{ fontSize: '1.85rem', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text-primary)' }}>
+            <h1 style={{ fontSize: '1.75rem', fontWeight: 700, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
               {t.adminTitle}
             </h1>
-            <p style={{ fontSize: '0.92rem', color: 'var(--text-secondary)', marginTop: '4px', maxWidth: '640px' }}>
+            <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
               {t.adminSubtitle}
             </p>
           </div>
 
           {/* Action & Sector Controls */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            {/* Segmented Sector Cross-Filter Pills */}
+            {/* Sector Cross-Filter Pills */}
             <div style={{
-              display: 'inline-flex',
-              padding: '4px',
-              background: 'var(--bg-input)',
-              borderRadius: 'var(--radius-full)',
-              border: '1px solid var(--border)'
+              display: 'flex',
+              gap: '6px',
+              flexWrap: 'wrap'
             }}>
               <button
                 onClick={() => setSectorFilter('all')}
-                style={{
-                  padding: '7px 16px',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  background: sectorFilter === 'all' ? 'var(--accent-black)' : 'transparent',
-                  color: sectorFilter === 'all' ? '#FFFFFF' : 'var(--text-secondary)',
-                  boxShadow: sectorFilter === 'all' ? '0 1px 3px rgba(0,0,0,0.12)' : 'none'
-                }}
+                className={`pill-toggle ${sectorFilter === 'all' ? 'active' : ''}`}
               >
                 🌐 All Sectors
               </button>
               <button
                 onClick={() => setSectorFilter('construction')}
-                style={{
-                  padding: '7px 16px',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  background: sectorFilter === 'construction' ? 'var(--accent-black)' : 'transparent',
-                  color: sectorFilter === 'construction' ? '#FFFFFF' : 'var(--text-secondary)',
-                  boxShadow: sectorFilter === 'construction' ? '0 1px 3px rgba(0,0,0,0.12)' : 'none'
-                }}
+                className={`pill-toggle ${sectorFilter === 'construction' ? 'active' : ''}`}
               >
                 🏗️ Construction
               </button>
               <button
                 onClick={() => setSectorFilter('hospital')}
-                style={{
-                  padding: '7px 16px',
-                  borderRadius: 'var(--radius-full)',
-                  fontSize: '0.82rem',
-                  fontWeight: 600,
-                  background: sectorFilter === 'hospital' ? 'var(--accent-black)' : 'transparent',
-                  color: sectorFilter === 'hospital' ? '#FFFFFF' : 'var(--text-secondary)',
-                  boxShadow: sectorFilter === 'hospital' ? '0 1px 3px rgba(0,0,0,0.12)' : 'none'
-                }}
+                className={`pill-toggle ${sectorFilter === 'hospital' ? 'active' : ''}`}
               >
                 🏥 Hospital
               </button>
@@ -177,30 +137,27 @@ export default function AdminDashboard({
             <button
               onClick={handleExportAudit}
               className="btn-black"
-              style={{ fontSize: '0.84rem', padding: '10px 18px', gap: '8px' }}
+              style={{ fontSize: '0.82rem', padding: '8px 16px', gap: '6px' }}
               title="Download tamper-evident labor compliance record"
             >
-              <span>📄</span> Export SDG 8 Audit
+              📄 Export SDG 8 Audit
             </button>
           </div>
         </div>
 
         {resolvedNotice && (
           <div style={{
-            marginTop: '18px',
+            marginTop: '16px',
             padding: '12px 18px',
-            background: '#ECFDF5',
-            border: '1px solid #A7F3D0',
+            background: 'rgba(16, 185, 129, 0.15)',
+            border: '1.5px solid rgba(16, 185, 129, 0.4)',
             borderRadius: 'var(--radius-md)',
-            color: '#047857',
+            color: '#34D399',
             fontWeight: 600,
             fontSize: '0.88rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
           }}>
-            <span style={{ fontSize: '1rem' }}>✓</span> {resolvedNotice}
+            ✓ {resolvedNotice}
           </div>
         )}
       </div>
@@ -208,131 +165,76 @@ export default function AdminDashboard({
       {/* KPI Metric Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: '16px'
       }}>
-        {/* Metric 1: Total Workers */}
-        <div className="card" style={{ padding: '22px 24px', position: 'relative' }}>
+        {/* Metric 1 */}
+        <div className="card" style={{ padding: '20px 24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="section-label">{t.statTotalWorkers}</span>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-sm)',
-              background: 'var(--bg-input)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px'
-            }}>
-              👥
-            </div>
+            <span style={{ fontSize: '18px' }}>👥</span>
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '10px', color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--text-primary)' }}>
             {totalOnSite}
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: '#047857', background: '#ECFDF5', padding: '3px 9px', borderRadius: 'var(--radius-full)', fontWeight: 600, marginTop: '8px' }}>
-            <span>↑</span> 98.4% Geofenced Compliance
+          <div style={{ fontSize: '0.78rem', color: 'var(--accent-green)', fontWeight: 600, marginTop: '6px' }}>
+            ↑ 98.4% Geofenced Compliance
           </div>
         </div>
 
-        {/* Metric 2: Avg Weekly Hours */}
-        <div className="card" style={{ padding: '22px 24px', position: 'relative' }}>
+        {/* Metric 2 */}
+        <div className="card" style={{ padding: '20px 24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="section-label">{t.statAvgHours}</span>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-sm)',
-              background: 'var(--bg-input)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px'
-            }}>
-              ⏱️
-            </div>
+            <span style={{ fontSize: '18px' }}>⏱️</span>
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '10px', color: 'var(--text-primary)', letterSpacing: '-0.03em' }}>
-            {avgWeeklyHours}<span style={{ fontSize: '1.3rem', fontWeight: 500, color: 'var(--text-secondary)' }}>h</span>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--text-primary)' }}>
+            {avgWeeklyHours}h
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: 'var(--text-secondary)', background: 'var(--bg-input)', padding: '3px 9px', borderRadius: 'var(--radius-full)', fontWeight: 500, marginTop: '8px' }}>
-            ⚖️ Max 48h/wk statutory cap
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            Max 48h/wk per labor act
           </div>
         </div>
 
         {/* Metric 3: Fatigue Violations */}
-        <div className="card" style={{ padding: '22px 24px', position: 'relative', borderTop: '3px solid var(--accent-amber)' }}>
+        <div className="card" style={{ padding: '20px 24px', borderLeft: '4px solid var(--accent-amber)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="section-label" style={{ color: '#B45309' }}>{t.statFatigueAlerts}</span>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-sm)',
-              background: '#FFFBEB',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px'
-            }}>
-              ⚠️
-            </div>
+            <span className="section-label" style={{ color: 'var(--accent-amber)' }}>{t.statFatigueAlerts}</span>
+            <span style={{ fontSize: '18px' }}>⚠️</span>
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '10px', color: '#B45309', letterSpacing: '-0.03em' }}>
-            {fatigueViolations.length} <span style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Staff</span>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--accent-amber)' }}>
+            {fatigueViolations.length} Staff
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: '#B45309', background: '#FFFBEB', padding: '3px 9px', borderRadius: 'var(--radius-full)', fontWeight: 600, marginTop: '8px' }}>
-            🛡️ Recovery relief pending
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            Mandatory recovery relief required
           </div>
         </div>
 
         {/* Metric 4: Safety Hazards */}
-        <div className="card" style={{ padding: '22px 24px', position: 'relative', borderTop: '3px solid var(--accent-red)' }}>
+        <div className="card" style={{ padding: '20px 24px', borderLeft: '4px solid var(--accent-red)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span className="section-label" style={{ color: '#B91C1C' }}>{t.statSafetyIncidents}</span>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-sm)',
-              background: '#FEF2F2',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px'
-            }}>
-              🚨
-            </div>
+            <span className="section-label" style={{ color: 'var(--accent-red)' }}>{t.statSafetyIncidents}</span>
+            <span style={{ fontSize: '18px' }}>🚨</span>
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '10px', color: '#B91C1C', letterSpacing: '-0.03em' }}>
-            {openHazardsCount} <span style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Open</span>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--accent-red)' }}>
+            {openHazardsCount} Open
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: '#B91C1C', background: '#FEF2F2', padding: '3px 9px', borderRadius: 'var(--radius-full)', fontWeight: 600, marginTop: '8px' }}>
-            ⚡ Emergency triage active
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            Safety alert protocol active
           </div>
         </div>
 
         {/* Metric 5: Attrition Risk */}
-        <div className="card" style={{ padding: '22px 24px', position: 'relative' }}>
+        <div className="card" style={{ padding: '20px 24px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span className="section-label">{t.statAttritionRisk}</span>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: 'var(--radius-sm)',
-              background: '#EFF6FF',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px'
-            }}>
-              📉
-            </div>
+            <span style={{ fontSize: '18px' }}>📉</span>
           </div>
-          <div style={{ fontSize: '2.4rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '10px', color: '#1D4ED8', letterSpacing: '-0.03em' }}>
-            {highAttritionWorkers.length} <span style={{ fontSize: '1.1rem', fontWeight: 500, color: 'var(--text-secondary)' }}>Flagged</span>
+          <div style={{ fontSize: '2.2rem', fontWeight: 700, fontFamily: 'var(--font-mono)', marginTop: '8px', color: 'var(--accent-blue)' }}>
+            {highAttritionWorkers.length} Flagged
           </div>
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '0.78rem', color: '#1D4ED8', background: '#EFF6FF', padding: '3px 9px', borderRadius: 'var(--radius-full)', fontWeight: 600, marginTop: '8px' }}>
-            🤖 AI Burnout Index model
+          <div style={{ fontSize: '0.78rem', color: 'var(--text-secondary)', marginTop: '6px' }}>
+            AI Burnout Index Alert
           </div>
         </div>
       </div>
@@ -345,39 +247,32 @@ export default function AdminDashboard({
       }}>
         
         {/* Attendance & Overtime 7-Day Trend Chart */}
-        <div className="card" style={{ padding: '24px 28px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="card" style={{ padding: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="section-num">1</span>
-              <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700 }}>
-                  7-Day Attendance & Overtime Trajectory
-                </h3>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Automated statutory 1.5x threshold tracking</span>
-              </div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700 }}>
+                7-Day Attendance & Overtime Hours
+              </h3>
             </div>
             <span className="badge badge-black">AUDITED</span>
           </div>
 
           {/* SVG Area Chart */}
           <div style={{ width: '100%', height: '180px' }}>
-            <svg viewBox="0 0 500 160" style={{ width: '100%', height: '100%', overflow: 'visible' }}>
+            <svg viewBox="0 0 500 160" style={{ width: '100%', height: '100%' }}>
               <defs>
                 <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#10B981" stopOpacity="0.28" />
-                  <stop offset="100%" stopColor="#10B981" stopOpacity="0.0" />
-                </linearGradient>
-                <linearGradient id="otGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#F59E0B" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#F59E0B" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#16A34A" stopOpacity="0.25" />
+                  <stop offset="100%" stopColor="#16A34A" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
               {/* Grid Lines */}
-              <line x1="40" y1="20" x2="480" y2="20" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="40" y1="60" x2="480" y2="60" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="40" y1="100" x2="480" y2="100" stroke="#F1F5F9" strokeWidth="1" />
-              <line x1="40" y1="140" x2="480" y2="140" stroke="#E2E8F0" strokeWidth="1.5" />
+              <line x1="40" y1="20" x2="480" y2="20" stroke="#E5E7EB" strokeWidth="1" />
+              <line x1="40" y1="60" x2="480" y2="60" stroke="#E5E7EB" strokeWidth="1" />
+              <line x1="40" y1="100" x2="480" y2="100" stroke="#E5E7EB" strokeWidth="1" />
+              <line x1="40" y1="140" x2="480" y2="140" stroke="#D1D5DB" strokeWidth="1.5" />
 
               {/* Attendance Standard Area */}
               <polygon
@@ -387,85 +282,75 @@ export default function AdminDashboard({
               <polyline
                 points="40,70 110,65 180,50 250,55 320,40 390,45 460,35"
                 fill="none"
-                stroke="#10B981"
+                stroke="#16A34A"
                 strokeWidth="3"
                 strokeLinecap="round"
-                strokeLinejoin="round"
               />
-
-              {/* Peak Dots */}
-              <circle cx="180" cy="50" r="4" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
-              <circle cx="320" cy="40" r="4" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
-              <circle cx="460" cy="35" r="4" fill="#10B981" stroke="#FFFFFF" strokeWidth="2" />
 
               {/* Overtime Line */}
               <polyline
                 points="40,120 110,115 180,95 250,110 320,85 390,90 460,80"
                 fill="none"
-                stroke="#F59E0B"
+                stroke="#D97706"
                 strokeWidth="2.5"
                 strokeDasharray="5,5"
-                strokeLinecap="round"
               />
 
               {/* Axis Labels */}
-              <text x="40" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Mon</text>
-              <text x="110" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Tue</text>
-              <text x="180" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Wed</text>
-              <text x="250" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Thu</text>
-              <text x="320" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Fri</text>
-              <text x="390" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Sat</text>
-              <text x="460" y="156" fill="#94A3B8" fontSize="11" fontFamily="var(--font-mono)" fontWeight="600">Sun</text>
+              <text x="40" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Mon</text>
+              <text x="110" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Tue</text>
+              <text x="180" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Wed</text>
+              <text x="250" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Thu</text>
+              <text x="320" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Fri</text>
+              <text x="390" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Sat</text>
+              <text x="460" y="155" fill="#6B7280" fontSize="11" fontFamily="var(--font-mono)">Sun</text>
             </svg>
           </div>
 
-          <div style={{ display: 'flex', gap: '24px', fontSize: '0.82rem', marginTop: '16px', borderTop: '1px solid var(--border)', paddingTop: '12px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 6px rgba(16,185,129,0.5)' }} />
-              <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Standard Hours (98.4% Compliant)</span>
+          <div style={{ display: 'flex', gap: '20px', fontSize: '0.8rem', marginTop: '12px', borderTop: '1px solid var(--border)', paddingTop: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#16A34A' }} />
+              <span style={{ color: 'var(--text-secondary)' }}>Regular Shift Hours (98.4%)</span>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#F59E0B' }} />
-              <span style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>1.5x Premium Overtime Tier</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#D97706' }} />
+              <span style={{ color: 'var(--text-secondary)' }}>1.5x Overtime Hours</span>
             </div>
           </div>
         </div>
 
         {/* Sector Comparison Bar Chart */}
-        <div className="card" style={{ padding: '24px 28px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <div className="card" style={{ padding: '24px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="section-num">2</span>
-              <div>
-                <h3 style={{ fontSize: '1.05rem', fontWeight: 700 }}>
-                  Cross-Sector Health Metrics
-                </h3>
-                <span style={{ fontSize: '0.78rem', color: 'var(--text-secondary)' }}>Benchmark comparisons across active facilities</span>
-              </div>
+              <h3 style={{ fontSize: '1.05rem', fontWeight: 700 }}>
+                Cross-Sector Health Metrics
+              </h3>
             </div>
-            <span className="badge badge-black">MULTI-SECTOR</span>
+            <span className="badge badge-black">MULTI-INDUSTRY</span>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
             {/* Construction Metric */}
-            <div style={{ background: 'var(--bg-input)', padding: '14px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>🏗️ Construction Site Alpha</span>
-                <span style={{ color: '#047857', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>Avg 42h/wk • Low Fatigue</span>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '6px' }}>
+                <span style={{ fontWeight: 600 }}>🏗️ Construction Site Alpha</span>
+                <span style={{ color: 'var(--accent-green)', fontWeight: 700 }}>Avg 42h/wk (Fatigue: 42%)</span>
               </div>
-              <div style={{ width: '100%', height: '8px', background: '#E2E8F0', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-                <div style={{ width: '42%', height: '100%', background: 'linear-gradient(90deg, #10B981, #059669)', borderRadius: 'var(--radius-full)' }} />
+              <div style={{ width: '100%', height: '8px', background: 'var(--bg-input)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '42%', height: '100%', background: 'var(--accent-green)', borderRadius: '4px' }} />
               </div>
             </div>
 
             {/* Hospital Metric */}
-            <div style={{ background: 'var(--bg-input)', padding: '14px 16px', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '8px' }}>
-                <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>🏥 St. Jude Metro Hospital</span>
-                <span style={{ color: '#B45309', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>Avg 50.5h/wk • 58% Warning</span>
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.86rem', marginBottom: '6px' }}>
+                <span style={{ fontWeight: 600 }}>🏥 St. Jude Metro Hospital</span>
+                <span style={{ color: 'var(--accent-amber)', fontWeight: 700 }}>Avg 50.5h/wk (Fatigue: 58% Warning)</span>
               </div>
-              <div style={{ width: '100%', height: '8px', background: '#E2E8F0', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
-                <div style={{ width: '58%', height: '100%', background: 'linear-gradient(90deg, #F59E0B, #D97706)', borderRadius: 'var(--radius-full)' }} />
+              <div style={{ width: '100%', height: '8px', background: 'var(--bg-input)', border: '1px solid var(--border)', borderRadius: '4px', overflow: 'hidden' }}>
+                <div style={{ width: '58%', height: '100%', background: 'var(--accent-amber)', borderRadius: '4px' }} />
               </div>
             </div>
 
@@ -473,25 +358,20 @@ export default function AdminDashboard({
             <div style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr',
-              gap: '12px'
+              gap: '12px',
+              marginTop: '8px',
+              padding: '14px',
+              background: 'var(--bg-input)',
+              border: '1.5px solid var(--border)',
+              borderRadius: 'var(--radius-md)'
             }}>
-              <div style={{
-                padding: '12px 14px',
-                background: '#ECFDF5',
-                border: '1px solid #A7F3D0',
-                borderRadius: 'var(--radius-md)'
-              }}>
-                <div style={{ fontSize: '0.72rem', color: '#047857', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Construction Morale</div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#065F46', marginTop: '3px', fontFamily: 'var(--font-mono)' }}>85% Favorable</div>
+              <div>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Construction Sentiment</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-green)', marginTop: '2px' }}>85% Favorable</div>
               </div>
-              <div style={{
-                padding: '12px 14px',
-                background: '#FEF2F2',
-                border: '1px solid #FECACA',
-                borderRadius: 'var(--radius-md)'
-              }}>
-                <div style={{ fontSize: '0.72rem', color: '#B91C1C', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Hospital Stress</div>
-                <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#991B1B', marginTop: '3px', fontFamily: 'var(--font-mono)' }}>54% Needs Relief</div>
+              <div>
+                <div style={{ fontSize: '0.74rem', color: 'var(--text-secondary)', fontWeight: 600 }}>Hospital Sentiment</div>
+                <div style={{ fontSize: '1.15rem', fontWeight: 700, color: 'var(--accent-red)', marginTop: '2px' }}>54% Needs Relief</div>
               </div>
             </div>
           </div>
@@ -500,8 +380,8 @@ export default function AdminDashboard({
       </div>
 
       {/* Feature 6: Anti-Fatigue & Overwork Radar */}
-      <div className="card" style={{ padding: '26px 30px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="card" style={{ padding: '24px 28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="section-num">3</span>
@@ -510,11 +390,10 @@ export default function AdminDashboard({
             <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginTop: '4px' }}>
               {t.fatigueRadarTitle}
             </h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
               {t.fatigueRadarDesc}
             </p>
           </div>
-          <span className="badge badge-black">SDG 8.8 ACTIVE</span>
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -527,35 +406,19 @@ export default function AdminDashboard({
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                padding: '16px 20px',
-                background: isFlagged ? '#FFFBEB' : '#FFFFFF',
-                border: isFlagged ? '1px solid #FDE68A' : '1px solid var(--border)',
-                borderRadius: 'var(--radius-lg)',
-                boxShadow: 'var(--shadow-sm)',
+                padding: '14px 18px',
+                background: isFlagged ? 'rgba(245, 158, 11, 0.12)' : 'rgba(255, 255, 255, 0.03)',
+                border: isFlagged ? '1px solid rgba(245, 158, 11, 0.35)' : '1px solid var(--border-glass)',
+                borderRadius: 'var(--radius-md)',
                 flexWrap: 'wrap',
-                gap: '14px',
-                transition: 'all 0.2s ease'
+                gap: '12px'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                  <div style={{
-                    width: '46px',
-                    height: '46px',
-                    borderRadius: 'var(--radius-md)',
-                    background: 'var(--bg-input)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '24px',
-                    border: '1px solid var(--border)'
-                  }}>
-                    {w.avatar}
-                  </div>
+                  <div style={{ fontSize: '26px' }}>{w.avatar}</div>
                   <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.98rem' }}>
-                      {w.name} <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>({w.id})</span>
-                    </div>
-                    <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', marginTop: '3px' }}>
-                      {w.role} • <strong style={{ color: 'var(--text-primary)' }}>{w.weeklyHours}h worked</strong> • Turnaround: <strong style={{ color: 'var(--text-primary)' }}>{w.lastShiftGapHours}h rest</strong>
+                    <div style={{ fontWeight: 700, fontSize: '0.96rem' }}>{w.name} <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>({w.id})</span></div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+                      {w.role} • <strong>{w.weeklyHours}h worked this week</strong> • Last turnaround gap: <strong>{w.lastShiftGapHours}h</strong>
                     </div>
                   </div>
                 </div>
@@ -569,14 +432,12 @@ export default function AdminDashboard({
                     <button
                       onClick={() => alert(`Relief staff automatically requested for ${w.name}. Next shift marked as mandatory recovery day.`)}
                       className="btn-black"
-                      style={{ fontSize: '0.82rem', padding: '8px 16px', gap: '6px' }}
+                      style={{ fontSize: '0.8rem', padding: '8px 14px' }}
                     >
                       🛡️ Dispatch Relief Rest
                     </button>
                   ) : (
-                    <span style={{ fontSize: '0.84rem', color: '#047857', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                      ✓ Compliant
-                    </span>
+                    <span style={{ fontSize: '0.82rem', color: 'var(--accent-green)', fontWeight: 600 }}>✓ Shift Compliant</span>
                   )}
                 </div>
               </div>
@@ -586,8 +447,8 @@ export default function AdminDashboard({
       </div>
 
       {/* Safety Hazard Triage Desk */}
-      <div className="card" style={{ padding: '26px 30px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="card" style={{ padding: '24px 28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '12px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="section-num">4</span>
@@ -596,7 +457,7 @@ export default function AdminDashboard({
             <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginTop: '4px' }}>
               {t.incidentTriageTitle}
             </h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
               Live worker voice & text safety alerts with emergency priority resolution
             </p>
           </div>
@@ -606,24 +467,22 @@ export default function AdminDashboard({
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           {filteredHazards.map(haz => (
             <div key={haz.id} style={{
-              padding: '20px',
-              background: haz.status.includes('Resolved') ? '#F0FDF4' : '#FFFFFF',
-              border: haz.status.includes('Resolved') ? '1px solid #BBF7D0' : '1px solid var(--border)',
-              borderLeft: haz.status.includes('Resolved') ? '4px solid #10B981' : haz.priority === 'CRITICAL' ? '4px solid #EF4444' : '4px solid #F59E0B',
-              borderRadius: 'var(--radius-lg)',
-              boxShadow: 'var(--shadow-sm)',
+              padding: '18px',
+              background: haz.status.includes('Resolved') ? 'rgba(16, 185, 129, 0.08)' : 'rgba(239, 68, 68, 0.08)',
+              border: haz.status.includes('Resolved') ? '1px solid rgba(16, 185, 129, 0.3)' : '1px solid rgba(239, 68, 68, 0.3)',
+              borderRadius: 'var(--radius-md)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px'
+              gap: '10px'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '1.02rem', color: 'var(--text-primary)' }}>
+                  <span style={{ fontWeight: 700, fontSize: '1.02rem', color: '#FFFFFF' }}>
                     {haz.id}: {haz.category}
                   </span>
                   {haz.audioAttached && (
-                    <span className="badge badge-black" style={{ fontSize: '0.68rem', gap: '4px' }}>
-                      🎙️ Voice Note Attached
+                    <span className="badge badge-blue" style={{ fontSize: '0.7rem' }}>
+                      🎙️ Audio Attached
                     </span>
                   )}
                 </div>
@@ -632,34 +491,33 @@ export default function AdminDashboard({
                   <span className={`badge ${haz.priority === 'CRITICAL' ? 'badge-red' : 'badge-amber'}`}>
                     {haz.priority}
                   </span>
-                  <span className={`badge ${haz.status.includes('Resolved') ? 'badge-green' : 'badge-black'}`}>
+                  <span className={`badge ${haz.status.includes('Resolved') ? 'badge-green' : 'badge-blue'}`}>
                     {haz.status}
                   </span>
                 </div>
               </div>
 
-              <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>
-                📍 {haz.location} • Reported: <em style={{ fontStyle: 'normal', color: 'var(--text-primary)' }}>{haz.timestamp}</em> by <strong>{haz.reportedBy}</strong>
+              <div style={{ fontSize: '0.82rem', color: '#94A3B8' }}>
+                📍 {haz.location} • Reported: <em>{haz.timestamp}</em> by <strong>{haz.reportedBy}</strong>
               </div>
 
               <p style={{
-                fontSize: '0.9rem',
-                color: 'var(--text-primary)',
-                background: 'var(--bg-page)',
-                border: '1px solid var(--border)',
+                fontSize: '0.88rem',
+                color: '#E2E8F0',
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid var(--border-glass)',
                 padding: '12px 16px',
-                borderRadius: 'var(--radius-sm)',
-                lineHeight: 1.5
+                borderRadius: 'var(--radius-sm)'
               }}>
                 "{haz.description}"
               </p>
 
               {!haz.status.includes('Resolved') && (
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2px' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
                   <button
                     onClick={() => handleResolve(haz.id)}
                     className="btn-black"
-                    style={{ fontSize: '0.84rem', padding: '9px 20px', gap: '6px' }}
+                    style={{ fontSize: '0.82rem', padding: '8px 18px' }}
                   >
                     <span>✓</span> {t.resolveAction}
                   </button>
@@ -671,7 +529,7 @@ export default function AdminDashboard({
       </div>
 
       {/* Workforce Roster with Attrition Risk Predictor */}
-      <div className="card" style={{ padding: '26px 30px' }}>
+      <div className="card" style={{ padding: '24px 28px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <span className="section-num">5</span>
           <span className="section-label">AI ATTRITION PREDICTOR</span>
@@ -679,58 +537,54 @@ export default function AdminDashboard({
         <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginTop: '4px' }}>
           {t.workerRegistryTitle}
         </h2>
-        <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginBottom: '18px' }}>
+        <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginBottom: '16px' }}>
           Predicting burnout and quit risks before critical staff turnover occurs
         </p>
 
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 'var(--radius-lg)' }}>
+        <div style={{ overflowX: 'auto' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.88rem' }}>
             <thead>
-              <tr style={{ background: 'var(--bg-input)', borderBottom: '1px solid var(--border)', color: 'var(--text-secondary)' }}>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Worker</th>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Sector & Role</th>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Weekly Hours</th>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Fatigue Risk</th>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Satisfaction</th>
-                <th style={{ padding: '14px 18px', fontWeight: 700, fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>AI Attrition Risk</th>
+              <tr style={{ borderBottom: '1.5px solid var(--border)', color: 'var(--text-secondary)' }}>
+                <th style={{ padding: '12px' }}>Worker</th>
+                <th style={{ padding: '12px' }}>Sector & Role</th>
+                <th style={{ padding: '12px' }}>Weekly Hrs</th>
+                <th style={{ padding: '12px' }}>Fatigue Risk</th>
+                <th style={{ padding: '12px' }}>Satisfaction</th>
+                <th style={{ padding: '12px' }}>AI Attrition Risk</th>
               </tr>
             </thead>
             <tbody>
-              {filteredWorkers.map((w, idx) => {
+              {filteredWorkers.map(w => {
                 const fatigue = evaluateFatigueRisk(w.weeklyHours, w.lastShiftGapHours, w.consecutiveShifts);
                 const attrition = calculateAttritionRisk({ ...w, fatigueScore: fatigue.riskScore });
 
                 return (
-                  <tr key={w.id} style={{
-                    borderBottom: idx === filteredWorkers.length - 1 ? 'none' : '1px solid var(--border)',
-                    background: '#FFFFFF',
-                    transition: 'background 0.15s ease'
-                  }}>
-                    <td style={{ padding: '14px 18px', fontWeight: 700 }}>
+                  <tr key={w.id} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '12px', fontWeight: 700 }}>
                       <span style={{ marginRight: '8px' }}>{w.avatar}</span>
                       {w.name}
                     </td>
-                    <td style={{ padding: '14px 18px', color: 'var(--text-secondary)' }}>
-                      <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{w.sector === 'construction' ? '🏗️ Construction' : '🏥 Hospital'}</div>
+                    <td style={{ padding: '12px', color: 'var(--text-secondary)' }}>
+                      <div>{w.sector === 'construction' ? '🏗️ Construction' : '🏥 Hospital'}</div>
                       <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)' }}>{w.role}</div>
                     </td>
-                    <td style={{ padding: '14px 18px', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>
+                    <td style={{ padding: '12px', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
                       {w.weeklyHours}h {w.weeklyHours > 48 ? '⚠️' : ''}
                     </td>
-                    <td style={{ padding: '14px 18px' }}>
+                    <td style={{ padding: '12px' }}>
                       <span className={`badge ${fatigue.riskLevel === 'CRITICAL' ? 'badge-red' : fatigue.riskLevel === 'MODERATE' ? 'badge-amber' : 'badge-green'}`} style={{ fontSize: '0.72rem' }}>
                         {fatigue.riskLevel}
                       </span>
                     </td>
-                    <td style={{ padding: '14px 18px', fontWeight: 600, fontFamily: 'var(--font-mono)' }}>
+                    <td style={{ padding: '12px', fontWeight: 600 }}>
                       {w.satisfactionScore}% ⭐
                     </td>
-                    <td style={{ padding: '14px 18px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <div style={{ width: '70px', height: '7px', background: 'var(--bg-input)', border: '1px solid var(--border)', borderRadius: 'var(--radius-full)', overflow: 'hidden' }}>
+                    <td style={{ padding: '12px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '60px', height: '6px', background: 'var(--bg-input)', border: '1px solid var(--border)', borderRadius: '3px', overflow: 'hidden' }}>
                           <div style={{ width: `${attrition.riskScore}%`, height: '100%', background: attrition.badgeColor }} />
                         </div>
-                        <span style={{ color: attrition.badgeColor, fontWeight: 700, fontSize: '0.8rem', fontFamily: 'var(--font-mono)' }}>
+                        <span style={{ color: attrition.badgeColor, fontWeight: 700, fontSize: '0.78rem' }}>
                           {attrition.riskScore}% {attrition.category}
                         </span>
                       </div>
@@ -744,8 +598,8 @@ export default function AdminDashboard({
       </div>
 
       {/* Section 6: Anonymous Worker Voice & Whistleblower Feedback */}
-      <div className="card" style={{ padding: '26px 30px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', flexWrap: 'wrap', gap: '12px' }}>
+      <div className="card" style={{ padding: '24px 28px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px', flexWrap: 'wrap', gap: '10px' }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span className="section-num">6</span>
@@ -754,7 +608,7 @@ export default function AdminDashboard({
             <h2 style={{ fontSize: '1.35rem', fontWeight: 700, marginTop: '4px' }}>
               Worker Sentiment & Anonymous Reports
             </h2>
-            <p style={{ fontSize: '0.88rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
+            <p style={{ fontSize: '0.86rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
               Aggregated worker feedback secured by SHA-256 cryptographic anonymity proofs
             </p>
           </div>
@@ -764,17 +618,17 @@ export default function AdminDashboard({
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '16px' }}>
           {filteredFeedbacks.map(f => (
             <div key={f.id} style={{
-              background: '#FFFFFF',
-              border: '1px solid var(--border)',
-              borderRadius: 'var(--radius-lg)',
-              padding: '20px',
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid var(--border-glass)',
+              borderRadius: 'var(--radius-md)',
+              padding: '18px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '12px',
-              boxShadow: 'var(--shadow-sm)'
+              gap: '10px',
+              transition: 'all 0.25s ease',
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontWeight: 700, fontSize: '0.94rem' }}>
+                <span style={{ fontWeight: 700, fontSize: '0.94rem', color: '#FFFFFF' }}>
                   {f.department || 'Frontline Shift Staff'}
                 </span>
                 <span className="badge badge-green" style={{ fontSize: '0.68rem' }}>
@@ -782,33 +636,26 @@ export default function AdminDashboard({
                 </span>
               </div>
 
-              <div style={{ display: 'flex', gap: '10px', fontSize: '0.78rem', flexWrap: 'wrap' }}>
-                <span style={{ background: 'var(--bg-input)', padding: '3px 8px', borderRadius: 'var(--radius-xs)' }}>
-                  Supervisor: <strong style={{ color: 'var(--text-primary)' }}>{f.supervisorScore}/5</strong>
-                </span>
-                <span style={{ background: 'var(--bg-input)', padding: '3px 8px', borderRadius: 'var(--radius-xs)' }}>
-                  Workload: <strong style={{ color: 'var(--text-primary)' }}>{f.workloadScore}/5</strong>
-                </span>
-                <span style={{ background: 'var(--bg-input)', padding: '3px 8px', borderRadius: 'var(--radius-xs)' }}>
-                  Safety: <strong style={{ color: 'var(--text-primary)' }}>{f.facilitiesScore}/5</strong>
-                </span>
+              <div style={{ display: 'flex', gap: '14px', fontSize: '0.78rem', color: '#94A3B8' }}>
+                <span>Supervisor: <strong style={{ color: '#38BDF8' }}>{f.supervisorScore}/5</strong></span>
+                <span>Workload: <strong style={{ color: '#FBBF24' }}>{f.workloadScore}/5</strong></span>
+                <span>Safety: <strong style={{ color: '#34D399' }}>{f.facilitiesScore}/5</strong></span>
               </div>
 
               <p style={{
-                fontSize: '0.88rem',
-                color: 'var(--text-primary)',
-                background: 'var(--bg-page)',
-                border: '1px solid var(--border)',
+                fontSize: '0.86rem',
+                color: '#E2E8F0',
+                background: 'rgba(255, 255, 255, 0.02)',
+                border: '1px solid var(--border-glass)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '12px 14px',
-                fontStyle: 'italic',
-                lineHeight: 1.5
+                fontStyle: 'italic'
               }}>
                 "{f.comment}"
               </p>
 
-              <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <span>🛡️</span> {f.anonymityProof}
+              <div style={{ fontSize: '0.72rem', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+                🛡️ {f.anonymityProof}
               </div>
             </div>
           ))}
@@ -818,4 +665,3 @@ export default function AdminDashboard({
     </div>
   );
 }
-

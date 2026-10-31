@@ -25,97 +25,104 @@ export default function WorkerPortal({
   ];
 
   return (
-    <div style={{ maxWidth: '1120px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-      {/* Premium Worker Identity Banner */}
+      {/* Worker identity hero bar — matching reference mockup header */}
       <div className="card" style={{
-        padding: '20px 24px',
+        padding: '24px 28px',
         marginBottom: '24px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         flexWrap: 'wrap',
-        gap: '16px',
-        background: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)'
+        gap: '20px',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
           <div style={{
-            width: '54px', height: '54px', borderRadius: '16px',
-            background: 'var(--accent-black)',
+            width: '60px', height: '60px', borderRadius: '18px',
+            background: 'linear-gradient(135deg, #1E3A8A 0%, #0284C7 50%, #06B6D4 100%)',
+            boxShadow: '0 8px 24px rgba(6, 182, 212, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.4)',
+            border: '1.5px solid rgba(255, 255, 255, 0.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '28px', flexShrink: 0,
-            boxShadow: '0 4px 12px -2px rgba(15, 23, 42, 0.25)'
+            fontSize: '30px', flexShrink: 0,
+            transition: 'transform 0.3s ease',
           }}>
             {worker.avatar}
           </div>
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                {t.welcomeBack}
-              </span>
-              <span className="badge badge-black" style={{ fontSize: '0.64rem', padding: '2px 8px' }}>
-                {worker.id}
-              </span>
+            <div style={{ fontSize: '0.78rem', color: '#94A3B8', fontWeight: 600, letterSpacing: '0.04em' }}>
+              Good Morning,
             </div>
-            <div style={{ fontSize: '1.35rem', fontWeight: 700, letterSpacing: '-0.025em', color: 'var(--text-primary)', marginTop: '2px' }}>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, letterSpacing: '-0.03em', color: '#FFFFFF' }}>
               {worker.name}
             </div>
-            <div style={{ fontSize: '0.84rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              {worker.role} · <strong>{sector.name}</strong>
+            <div style={{ fontSize: '0.84rem', color: '#38BDF8', display: 'flex', alignItems: 'center', gap: '8px', marginTop: '2px' }}>
+              <span>{worker.role}</span>
+              <span style={{ opacity: 0.4 }}>•</span>
+              <span style={{ color: '#94A3B8' }}>{sector.name}</span>
             </div>
           </div>
         </div>
 
-        {/* Status Indicators */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+        {/* Quick telemetry pills */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+          {/* Rate Badge */}
           <div style={{
-            background: 'var(--bg-input)',
-            border: '1px solid var(--border)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '8px 14px',
-            fontSize: '0.8rem',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px'
+            background: 'rgba(255, 255, 255, 0.04)',
+            border: '1px solid var(--border-glass)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '10px 16px',
+            textAlign: 'center',
           }}>
-            <span style={{ color: 'var(--text-muted)' }}>Base:</span>
-            <strong style={{ fontFamily: 'var(--font-mono)' }}>₹{worker.hourlyRate}/h</strong>
-            <span style={{ color: 'var(--border-dark)' }}>•</span>
-            <span style={{ color: 'var(--text-muted)' }}>Hazard:</span>
-            <strong style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent-amber)' }}>+₹{worker.hazardRate}/h</strong>
+            <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Base Rate</div>
+            <div style={{ fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: '1.1rem', color: '#38BDF8' }}>
+              ₹{worker.hourlyRate}/hr
+            </div>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span className={`badge ${fatigueAnalysis.riskLevel === 'CRITICAL' ? 'badge-red' : fatigueAnalysis.riskLevel === 'MODERATE' ? 'badge-amber' : 'badge-green'}`} style={{ padding: '6px 12px' }}>
-              <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: fatigueAnalysis.riskLevel === 'CRITICAL' ? '#EF4444' : fatigueAnalysis.riskLevel === 'MODERATE' ? '#F59E0B' : '#10B981' }} />
+          {/* Fatigue badge */}
+          <div style={{
+            background: 'rgba(255, 255, 255, 0.04)',
+            border: '1px solid var(--border-glass)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '10px 16px',
+            textAlign: 'center',
+          }}>
+            <div style={{ fontSize: '0.68rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '4px' }}>
+              {t.fatigueRisk}
+            </div>
+            <span className={`badge ${fatigueAnalysis.riskLevel === 'CRITICAL' ? 'badge-red' : fatigueAnalysis.riskLevel === 'MODERATE' ? 'badge-amber' : 'badge-green'}`}>
               {fatigueAnalysis.riskLevel === 'CRITICAL' ? t.fatigueHigh : fatigueAnalysis.riskLevel === 'MODERATE' ? t.fatigueModerate : t.fatigueNormal}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Tab Navigation (Modern Segmented Capsule) */}
+      {/* Tab navigation — floating liquid pill container */}
       <div style={{
-        display: 'flex', gap: '8px', flexWrap: 'wrap',
+        display: 'inline-flex',
+        gap: '6px',
+        flexWrap: 'wrap',
         marginBottom: '24px',
-        padding: '4px',
-        background: 'rgba(241, 245, 249, 0.7)',
+        background: 'rgba(255, 255, 255, 0.03)',
+        border: '1px solid var(--border-glass)',
+        padding: '5px',
         borderRadius: 'var(--radius-full)',
-        border: '1px solid var(--border)'
+        backdropFilter: 'blur(16px)',
       }}>
         {tabs.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`pill-toggle${activeTab === tab.id ? ' active' : ''}`}
-            style={{ fontSize: '0.86rem', padding: '10px 20px', gap: '8px', border: activeTab === tab.id ? 'none' : '1px solid transparent', background: activeTab === tab.id ? 'var(--accent-black)' : 'transparent', boxShadow: activeTab === tab.id ? '0 2px 8px rgba(15, 23, 42, 0.2)' : 'none' }}
+            style={{ fontSize: '0.85rem', padding: '10px 20px', gap: '8px' }}
           >
-            <span style={{ fontSize: '1rem' }}>{tab.icon}</span> {tab.label}
+            <span>{tab.icon}</span> {tab.label}
           </button>
         ))}
       </div>
 
-      {/* Tab Content with Smooth Fade Transition */}
+      {/* Tab content */}
       <div className="fade-in" key={activeTab}>
         {activeTab === 'shift' && (
           <ShiftTracker worker={worker} sector={sector} t={t}
