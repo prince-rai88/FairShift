@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import WorkerPortal from './components/worker/WorkerPortal';
 import AdminDashboard from './components/admin/AdminDashboard';
+import LiquidBackground from './components/common/LiquidBackground';
 import { translations } from './i18n/translations';
 import { sectors, initialWorkers, initialHazards, initialFeedbacks } from './data/mockData';
 
@@ -76,7 +77,8 @@ export default function App() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+      <LiquidBackground />
       
       <Header
         currentLang={currentLang}
@@ -88,7 +90,7 @@ export default function App() {
       />
 
       {/* Main Content Area */}
-      <main style={{ flex: 1, padding: '32px 24px' }}>
+      <main style={{ flex: 1, padding: '32px 24px', position: 'relative', zIndex: 1 }}>
         {activeRole === 'worker' ? (
           <WorkerPortal
             worker={currentWorker}
